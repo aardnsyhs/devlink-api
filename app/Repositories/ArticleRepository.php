@@ -16,7 +16,7 @@ class ArticleRepository implements ArticleRepositoryInterface
   {
     return $this->model
       ->with(['user:id,name', 'tags'])
-      ->when($filters['status'] ?? null, fn($q, $v) => $q->where('status', $v))
+      ->published()
       ->when($filters['search'] ?? null, fn($q, $v) => $q->where('title', 'like', "%{$v}%"))
       ->latest('published_at')
       ->paginate($filters['per_page'] ?? 15);
@@ -24,7 +24,11 @@ class ArticleRepository implements ArticleRepositoryInterface
 
   public function findBySlug(string $slug): ?object
   {
-    return $this->model->with(['user', 'tags'])->where('slug', $slug)->firstOrFail();
+    return $this->model
+      ->with(['user', 'tags'])
+      ->published()
+      ->where('slug', $slug)
+      ->firstOrFail();
   }
 
   public function create(array $data): object

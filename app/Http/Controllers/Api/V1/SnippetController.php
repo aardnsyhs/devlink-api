@@ -93,7 +93,11 @@ class SnippetController extends Controller
    */
   public function update(SnippetRequest $request, int $id): SnippetResource
   {
-    $snippet = $this->snippetService->update($id, $request->validated());
+    $snippet = $this->snippetService->update(
+      $id,
+      $request->validated(),
+      $request->user()->id
+    );
 
     return new SnippetResource($snippet);
   }
@@ -110,7 +114,7 @@ class SnippetController extends Controller
    */
   public function destroy(int $id): JsonResponse
   {
-    $this->snippetService->delete($id);
+    $this->snippetService->delete($id, request()->user()->id);
 
     return response()->json(null, 204);
   }

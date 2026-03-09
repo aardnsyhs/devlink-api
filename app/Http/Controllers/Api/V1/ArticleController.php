@@ -91,7 +91,11 @@ class ArticleController extends Controller
    */
   public function update(ArticleRequest $request, int $id): ArticleResource
   {
-    $article = $this->articleService->update($id, $request->validated());
+    $article = $this->articleService->update(
+      $id,
+      $request->validated(),
+      $request->user()->id
+    );
 
     return new ArticleResource($article);
   }
@@ -108,7 +112,7 @@ class ArticleController extends Controller
    */
   public function destroy(int $id): JsonResponse
   {
-    $this->articleService->delete($id);
+    $this->articleService->delete($id, request()->user()->id);
 
     return response()->json(null, 204);
   }

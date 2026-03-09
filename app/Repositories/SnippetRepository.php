@@ -16,7 +16,7 @@ class SnippetRepository implements SnippetRepositoryInterface
   {
     return $this->model
       ->with(['user:id,name', 'tags'])
-      ->when($filters['status'] ?? null, fn($q, $v) => $q->where('status', $v))
+      ->published()
       ->when($filters['language'] ?? null, fn($q, $v) => $q->where('language', $v))
       ->when($filters['search'] ?? null, fn($q, $v) => $q->where('title', 'like', "%{$v}%"))
       ->latest('published_at')
@@ -25,7 +25,11 @@ class SnippetRepository implements SnippetRepositoryInterface
 
   public function findBySlug(string $slug): ?object
   {
-    return $this->model->with(['user', 'tags'])->where('slug', $slug)->firstOrFail();
+    return $this->model
+      ->with(['user', 'tags'])
+      ->published()
+      ->where('slug', $slug)
+      ->firstOrFail();
   }
 
   public function create(array $data): object

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\Interfaces\SnippetRepositoryInterface;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class SnippetService
 {
@@ -38,8 +39,11 @@ class SnippetService
     return $snippet->load(['user', 'tags']);
   }
 
-  public function update(int $id, array $data)
+  public function update(int $id, array $data, int $userId)
   {
+    $snippet = $this->snippetRepository->findById($id);
+    $this->authorizeOwner((int) $snippet->user_id, $userId);
+
     if (isset($data['status']) && $data['status'] === 'published') {
       $data['published_at'] ??= now();
     }
@@ -53,8 +57,18 @@ class SnippetService
     return $snippet->load(['user', 'tags']);
   }
 
-  public function delete(int $id): bool
+  public function delete(int $id, int $userId): bool
   {
+    $snippet = $this->snippetRepository->findById($id);
+    $this->authorizeOwner((int) $snippet->user_id, $userId);
+
     return $this->snippetRepository->delete($id);
+  }
+
+  private function authorizeOwner(int $ownerId, int $userId): void
+  {
+    if ($ownerId !== $userId) {
+      throw new AuthorizationException('You are not allowed to modify this resource.');
+    }
   }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
@@ -21,6 +22,10 @@ class Handler extends ExceptionHandler
         $e instanceof AuthenticationException => response()->json([
           'message' => 'Unauthenticated',
         ], 401),
+
+        $e instanceof AuthorizationException => response()->json([
+          'message' => $e->getMessage() ?: 'Forbidden',
+        ], 403),
 
         $e instanceof NotFoundHttpException => response()->json([
           'message' => 'Resource not found',

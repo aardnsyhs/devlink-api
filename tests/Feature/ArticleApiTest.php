@@ -9,14 +9,31 @@ beforeEach(function () {
 });
 
 it('can list published articles', function () {
-  Article::factory(5)->published()->create();
+  $initialTotal = $this->getJson('/api/v1/articles')
+    ->assertOk()
+    ->json('meta.total');
+  $initialTotal = (int) (is_array($initialTotal) ? end($initialTotal) : $initialTotal);
 
-  $this->getJson('/api/v1/articles')
+  Article::factory(5)->published()->create();
+  Article::factory(2)->create(['status' => 'draft']);
+
+  $response = $this->getJson('/api/v1/articles')
     ->assertOk()
     ->assertJsonStructure([
       'data' => [['id', 'title', 'slug', 'excerpt', 'author']],
       'meta' => ['current_page', 'total'],
     ]);
+  $currentTotal = $response->json('meta.total');
+  $currentTotal = (int) (is_array($currentTotal) ? end($currentTotal) : $currentTotal);
+
+  expect($currentTotal)->toBe($initialTotal + 5);
+});
+
+it('does not show unpublished article on public endpoint', function () {
+  $draftArticle = Article::factory()->create(['status' => 'draft']);
+
+  $this->getJson('/api/v1/articles/' . $draftArticle->slug)
+    ->assertNotFound();
 });
 
 it('requires authentication to create article', function () {
