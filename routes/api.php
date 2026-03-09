@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\ArticleController;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\SnippetController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/user', function (Request $request) {

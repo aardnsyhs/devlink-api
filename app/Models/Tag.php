@@ -16,4 +16,9 @@ class Tag extends Model
   {
     return $this->belongsToMany(Article::class);
   }
+
+  public function snippets()
+  {
+    return $this->belongsToMany(Snippet::class);
+  }
 }

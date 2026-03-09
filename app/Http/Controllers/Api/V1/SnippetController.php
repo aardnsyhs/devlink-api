@@ -1,0 +1,117 @@
+<?php
+
+namespace App\Http\Controllers\Api\V1;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\SnippetRequest;
+use App\Http\Resources\SnippetCollection;
+use App\Http\Resources\SnippetResource;
+use App\Services\SnippetService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use OpenApi\Annotations as OA;
+
+class SnippetController extends Controller
+{
+  public function __construct(private SnippetService $snippetService)
+  {
+  }
+
+  /**
+   * @OA\Get(
+   *     path="/api/v1/snippets",
+   *     tags={"Snippets"},
+   *     summary="Get all published snippets",
+   *     @OA\Parameter(name="search", in="query", @OA\Schema(type="string")),
+   *     @OA\Parameter(name="status", in="query", @OA\Schema(type="string", enum={"draft","published","archived"})),
+   *     @OA\Parameter(name="language", in="query", @OA\Schema(type="string")),
+   *     @OA\Parameter(name="per_page", in="query", @OA\Schema(type="integer", default=15)),
+   *     @OA\Response(response=200, description="List of snippets")
+   * )
+   */
+  public function index(Request $request): SnippetCollection
+  {
+    $snippets = $this->snippetService->getAll($request->only([
+      'search',
+      'status',
+      'language',
+      'per_page',
+    ]));
+
+    return new SnippetCollection($snippets);
+  }
+
+  /**
+   * @OA\Get(
+   *     path="/api/v1/snippets/{slug}",
+   *     tags={"Snippets"},
+   *     summary="Get snippet by slug",
+   *     @OA\Parameter(name="slug", in="path", required=true, @OA\Schema(type="string")),
+   *     @OA\Response(response=200, description="Snippet detail"),
+   *     @OA\Response(response=404, description="Not found")
+   * )
+   */
+  public function show(string $slug): SnippetResource
+  {
+    $snippet = $this->snippetService->getBySlug($slug);
+    $snippet->increment('views');
+
+    return new SnippetResource($snippet->fresh(['user', 'tags']));
+  }
+
+  /**
+   * @OA\Post(
+   *     path="/api/v1/snippets",
+   *     tags={"Snippets"},
+   *     summary="Create new snippet",
+   *     security={{"bearerAuth":{}}},
+   *     @OA\Response(response=201, description="Snippet created"),
+   *     @OA\Response(response=422, description="Validation error")
+   * )
+   */
+  public function store(SnippetRequest $request): JsonResponse
+  {
+    $snippet = $this->snippetService->create(
+      $request->validated(),
+      $request->user()->id
+    );
+
+    return (new SnippetResource($snippet))
+      ->response()
+      ->setStatusCode(201);
+  }
+
+  /**
+   * @OA\Put(
+   *     path="/api/v1/snippets/{id}",
+   *     tags={"Snippets"},
+   *     summary="Update snippet",
+   *     security={{"bearerAuth":{}}},
+   *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+   *     @OA\Response(response=200, description="Snippet updated")
+   * )
+   */
+  public function update(SnippetRequest $request, int $id): SnippetResource
+  {
+    $snippet = $this->snippetService->update($id, $request->validated());
+
+    return new SnippetResource($snippet);
+  }
+
+  /**
+   * @OA\Delete(
+   *     path="/api/v1/snippets/{id}",
+   *     tags={"Snippets"},
+   *     summary="Delete snippet",
+   *     security={{"bearerAuth":{}}},
+   *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+   *     @OA\Response(response=204, description="Deleted")
+   * )
+   */
+  public function destroy(int $id): JsonResponse
+  {
+    $this->snippetService->delete($id);
+
+    return response()->json(null, 204);
+  }
+}

@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use App\Repositories\ArticleRepository;
+use App\Repositories\SnippetRepository;
 use App\Repositories\Interfaces\ArticleRepositoryInterface;
+use App\Repositories\Interfaces\SnippetRepositoryInterface;
+use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -14,6 +16,7 @@ class RepositoryServiceProvider extends ServiceProvider
   public function register(): void
   {
     $this->app->bind(ArticleRepositoryInterface::class, ArticleRepository::class);
+    $this->app->bind(SnippetRepositoryInterface::class, SnippetRepository::class);
   }
 
   /**
