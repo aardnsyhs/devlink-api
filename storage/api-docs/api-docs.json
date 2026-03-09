@@ -60,79 +60,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "integer"
-                                                    },
-                                                    "title": {
-                                                        "type": "string"
-                                                    },
-                                                    "slug": {
-                                                        "type": "string"
-                                                    },
-                                                    "excerpt": {
-                                                        "type": "string"
-                                                    },
-                                                    "status": {
-                                                        "type": "string",
-                                                        "enum": [
-                                                            "draft",
-                                                            "published",
-                                                            "archived"
-                                                        ]
-                                                    },
-                                                    "views": {
-                                                        "type": "integer"
-                                                    },
-                                                    "published_at": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "nullable": true
-                                                    },
-                                                    "author": {
-                                                        "properties": {
-                                                            "id": {
-                                                                "type": "integer"
-                                                            },
-                                                            "name": {
-                                                                "type": "string"
-                                                            }
-                                                        },
-                                                        "type": "object"
-                                                    },
-                                                    "tags": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "type": "object"
-                                                        }
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        },
-                                        "meta": {
-                                            "properties": {
-                                                "current_page": {
-                                                    "type": "integer"
-                                                },
-                                                "per_page": {
-                                                    "type": "integer"
-                                                },
-                                                "total": {
-                                                    "type": "integer"
-                                                },
-                                                "last_page": {
-                                                    "type": "integer"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/ArticleCollectionResponse"
                                 }
                             }
                         }
@@ -150,42 +78,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "title",
-                                    "excerpt",
-                                    "content"
-                                ],
-                                "properties": {
-                                    "title": {
-                                        "type": "string"
-                                    },
-                                    "excerpt": {
-                                        "type": "string"
-                                    },
-                                    "content": {
-                                        "type": "string"
-                                    },
-                                    "status": {
-                                        "type": "string",
-                                        "enum": [
-                                            "draft",
-                                            "published",
-                                            "archived"
-                                        ]
-                                    },
-                                    "published_at": {
-                                        "type": "string",
-                                        "format": "date-time",
-                                        "nullable": true
-                                    },
-                                    "tags": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "integer"
-                                        }
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/ArticleUpsertRequest"
                             }
                         }
                     }
@@ -196,12 +89,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/ArticleSingleResponse"
                                 }
                             }
                         }
@@ -211,13 +99,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthenticated"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/MessageResponse"
                                 }
                             }
                         }
@@ -227,15 +109,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string"
-                                        },
-                                        "errors": {
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
                                 }
                             }
                         }
@@ -271,58 +145,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "id": {
-                                                    "type": "integer"
-                                                },
-                                                "title": {
-                                                    "type": "string"
-                                                },
-                                                "slug": {
-                                                    "type": "string"
-                                                },
-                                                "excerpt": {
-                                                    "type": "string"
-                                                },
-                                                "content": {
-                                                    "type": "string"
-                                                },
-                                                "status": {
-                                                    "type": "string",
-                                                    "enum": [
-                                                        "draft",
-                                                        "published",
-                                                        "archived"
-                                                    ]
-                                                },
-                                                "views": {
-                                                    "type": "integer"
-                                                },
-                                                "published_at": {
-                                                    "type": "string",
-                                                    "format": "date-time",
-                                                    "nullable": true
-                                                },
-                                                "created_at": {
-                                                    "type": "string",
-                                                    "format": "date-time"
-                                                },
-                                                "author": {
-                                                    "type": "object"
-                                                },
-                                                "tags": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "object"
-                                                    }
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/ArticleSingleResponse"
                                 }
                             }
                         }
@@ -332,13 +155,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/MessageResponse"
                                 }
                             }
                         }
@@ -368,42 +185,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "title",
-                                    "excerpt",
-                                    "content"
-                                ],
-                                "properties": {
-                                    "title": {
-                                        "type": "string"
-                                    },
-                                    "excerpt": {
-                                        "type": "string"
-                                    },
-                                    "content": {
-                                        "type": "string"
-                                    },
-                                    "status": {
-                                        "type": "string",
-                                        "enum": [
-                                            "draft",
-                                            "published",
-                                            "archived"
-                                        ]
-                                    },
-                                    "published_at": {
-                                        "type": "string",
-                                        "format": "date-time",
-                                        "nullable": true
-                                    },
-                                    "tags": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "integer"
-                                        }
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/ArticleUpsertRequest"
                             }
                         }
                     }
@@ -414,12 +196,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/ArticleSingleResponse"
                                 }
                             }
                         }
@@ -429,13 +206,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthenticated"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/MessageResponse"
                                 }
                             }
                         }
@@ -445,12 +216,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/MessageResponse"
                                 }
                             }
                         }
@@ -460,15 +226,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string"
-                                        },
-                                        "errors": {
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
                                 }
                             }
                         }
@@ -505,13 +263,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthenticated"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/MessageResponse"
                                 }
                             }
                         }
@@ -521,12 +273,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/MessageResponse"
                                 }
                             }
                         }
@@ -551,30 +298,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "name",
-                                    "email",
-                                    "password",
-                                    "password_confirmation"
-                                ],
-                                "properties": {
-                                    "name": {
-                                        "type": "string"
-                                    },
-                                    "email": {
-                                        "type": "string",
-                                        "format": "email"
-                                    },
-                                    "password": {
-                                        "type": "string",
-                                        "minLength": 8
-                                    },
-                                    "password_confirmation": {
-                                        "type": "string",
-                                        "minLength": 8
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/AuthRegisterRequest"
                             }
                         }
                     }
@@ -585,39 +309,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "User registered successfully"
-                                        },
-                                        "data": {
-                                            "properties": {
-                                                "user": {
-                                                    "properties": {
-                                                        "id": {
-                                                            "type": "integer",
-                                                            "example": 1
-                                                        },
-                                                        "name": {
-                                                            "type": "string",
-                                                            "example": "John Doe"
-                                                        },
-                                                        "email": {
-                                                            "type": "string",
-                                                            "format": "email",
-                                                            "example": "john@example.com"
-                                                        }
-                                                    },
-                                                    "type": "object"
-                                                },
-                                                "token": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/AuthResponse"
                                 }
                             }
                         }
@@ -627,16 +319,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Validation failed"
-                                        },
-                                        "errors": {
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
                                 }
                             }
                         }
@@ -656,21 +339,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "email",
-                                    "password"
-                                ],
-                                "properties": {
-                                    "email": {
-                                        "type": "string",
-                                        "format": "email"
-                                    },
-                                    "password": {
-                                        "type": "string",
-                                        "minLength": 8
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/AuthLoginRequest"
                             }
                         }
                     }
@@ -681,39 +350,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Login successful"
-                                        },
-                                        "data": {
-                                            "properties": {
-                                                "user": {
-                                                    "properties": {
-                                                        "id": {
-                                                            "type": "integer",
-                                                            "example": 1
-                                                        },
-                                                        "name": {
-                                                            "type": "string",
-                                                            "example": "John Doe"
-                                                        },
-                                                        "email": {
-                                                            "type": "string",
-                                                            "format": "email",
-                                                            "example": "john@example.com"
-                                                        }
-                                                    },
-                                                    "type": "object"
-                                                },
-                                                "token": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/AuthResponse"
                                 }
                             }
                         }
@@ -723,15 +360,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string"
-                                        },
-                                        "errors": {
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
                                 }
                             }
                         }
@@ -752,13 +381,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Logged out successfully"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/MessageResponse"
                                 }
                             }
                         }
@@ -768,13 +391,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthenticated"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/MessageResponse"
                                 }
                             }
                         }
@@ -836,86 +453,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "integer"
-                                                    },
-                                                    "title": {
-                                                        "type": "string"
-                                                    },
-                                                    "slug": {
-                                                        "type": "string"
-                                                    },
-                                                    "description": {
-                                                        "type": "string",
-                                                        "nullable": true
-                                                    },
-                                                    "language": {
-                                                        "type": "string"
-                                                    },
-                                                    "status": {
-                                                        "type": "string",
-                                                        "enum": [
-                                                            "draft",
-                                                            "published",
-                                                            "archived"
-                                                        ]
-                                                    },
-                                                    "views": {
-                                                        "type": "integer"
-                                                    },
-                                                    "likes": {
-                                                        "type": "integer"
-                                                    },
-                                                    "published_at": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "nullable": true
-                                                    },
-                                                    "author": {
-                                                        "properties": {
-                                                            "id": {
-                                                                "type": "integer"
-                                                            },
-                                                            "name": {
-                                                                "type": "string"
-                                                            }
-                                                        },
-                                                        "type": "object"
-                                                    },
-                                                    "tags": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "type": "object"
-                                                        }
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        },
-                                        "meta": {
-                                            "properties": {
-                                                "current_page": {
-                                                    "type": "integer"
-                                                },
-                                                "per_page": {
-                                                    "type": "integer"
-                                                },
-                                                "total": {
-                                                    "type": "integer"
-                                                },
-                                                "last_page": {
-                                                    "type": "integer"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/SnippetCollectionResponse"
                                 }
                             }
                         }
@@ -933,46 +471,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "title",
-                                    "code",
-                                    "language"
-                                ],
-                                "properties": {
-                                    "title": {
-                                        "type": "string"
-                                    },
-                                    "description": {
-                                        "type": "string",
-                                        "nullable": true
-                                    },
-                                    "code": {
-                                        "type": "string"
-                                    },
-                                    "language": {
-                                        "type": "string"
-                                    },
-                                    "status": {
-                                        "type": "string",
-                                        "enum": [
-                                            "draft",
-                                            "published",
-                                            "archived"
-                                        ]
-                                    },
-                                    "published_at": {
-                                        "type": "string",
-                                        "format": "date-time",
-                                        "nullable": true
-                                    },
-                                    "tags": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "integer"
-                                        }
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/SnippetUpsertRequest"
                             }
                         }
                     }
@@ -983,12 +482,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/SnippetSingleResponse"
                                 }
                             }
                         }
@@ -998,13 +492,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthenticated"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/MessageResponse"
                                 }
                             }
                         }
@@ -1014,15 +502,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string"
-                                        },
-                                        "errors": {
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
                                 }
                             }
                         }
@@ -1058,65 +538,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "id": {
-                                                    "type": "integer"
-                                                },
-                                                "title": {
-                                                    "type": "string"
-                                                },
-                                                "slug": {
-                                                    "type": "string"
-                                                },
-                                                "description": {
-                                                    "type": "string",
-                                                    "nullable": true
-                                                },
-                                                "code": {
-                                                    "type": "string"
-                                                },
-                                                "language": {
-                                                    "type": "string"
-                                                },
-                                                "status": {
-                                                    "type": "string",
-                                                    "enum": [
-                                                        "draft",
-                                                        "published",
-                                                        "archived"
-                                                    ]
-                                                },
-                                                "views": {
-                                                    "type": "integer"
-                                                },
-                                                "likes": {
-                                                    "type": "integer"
-                                                },
-                                                "published_at": {
-                                                    "type": "string",
-                                                    "format": "date-time",
-                                                    "nullable": true
-                                                },
-                                                "created_at": {
-                                                    "type": "string",
-                                                    "format": "date-time"
-                                                },
-                                                "author": {
-                                                    "type": "object"
-                                                },
-                                                "tags": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "object"
-                                                    }
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/SnippetSingleResponse"
                                 }
                             }
                         }
@@ -1126,13 +548,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/MessageResponse"
                                 }
                             }
                         }
@@ -1162,46 +578,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "title",
-                                    "code",
-                                    "language"
-                                ],
-                                "properties": {
-                                    "title": {
-                                        "type": "string"
-                                    },
-                                    "description": {
-                                        "type": "string",
-                                        "nullable": true
-                                    },
-                                    "code": {
-                                        "type": "string"
-                                    },
-                                    "language": {
-                                        "type": "string"
-                                    },
-                                    "status": {
-                                        "type": "string",
-                                        "enum": [
-                                            "draft",
-                                            "published",
-                                            "archived"
-                                        ]
-                                    },
-                                    "published_at": {
-                                        "type": "string",
-                                        "format": "date-time",
-                                        "nullable": true
-                                    },
-                                    "tags": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "integer"
-                                        }
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/SnippetUpsertRequest"
                             }
                         }
                     }
@@ -1212,12 +589,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/SnippetSingleResponse"
                                 }
                             }
                         }
@@ -1227,13 +599,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthenticated"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/MessageResponse"
                                 }
                             }
                         }
@@ -1243,12 +609,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/MessageResponse"
                                 }
                             }
                         }
@@ -1258,15 +619,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string"
-                                        },
-                                        "errors": {
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
                                 }
                             }
                         }
@@ -1303,13 +656,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthenticated"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/MessageResponse"
                                 }
                             }
                         }
@@ -1319,12 +666,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/MessageResponse"
                                 }
                             }
                         }
@@ -1339,6 +681,488 @@
         }
     },
     "components": {
+        "schemas": {
+            "UserSummary": {
+                "required": [
+                    "id",
+                    "name",
+                    "email"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "john@example.com"
+                    }
+                },
+                "type": "object"
+            },
+            "AuthorSummary": {
+                "required": [
+                    "id",
+                    "name"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "John Doe"
+                    }
+                },
+                "type": "object"
+            },
+            "TagResource": {
+                "required": [
+                    "id",
+                    "name",
+                    "slug"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Laravel"
+                    },
+                    "slug": {
+                        "type": "string",
+                        "example": "laravel"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginationMeta": {
+                "required": [
+                    "current_page",
+                    "per_page",
+                    "total",
+                    "last_page"
+                ],
+                "properties": {
+                    "current_page": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "per_page": {
+                        "type": "integer",
+                        "example": 15
+                    },
+                    "total": {
+                        "type": "integer",
+                        "example": 100
+                    },
+                    "last_page": {
+                        "type": "integer",
+                        "example": 7
+                    }
+                },
+                "type": "object"
+            },
+            "ArticleSummary": {
+                "required": [
+                    "id",
+                    "title",
+                    "slug",
+                    "excerpt",
+                    "status",
+                    "views",
+                    "author",
+                    "tags",
+                    "created_at"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "slug": {
+                        "type": "string"
+                    },
+                    "excerpt": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "draft",
+                            "published",
+                            "archived"
+                        ]
+                    },
+                    "views": {
+                        "type": "integer"
+                    },
+                    "published_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "author": {
+                        "$ref": "#/components/schemas/AuthorSummary"
+                    },
+                    "tags": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/TagResource"
+                        }
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "ArticleDetail": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/ArticleSummary"
+                    },
+                    {
+                        "properties": {
+                            "content": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
+            },
+            "ArticleCollectionResponse": {
+                "required": [
+                    "data",
+                    "meta"
+                ],
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ArticleSummary"
+                        }
+                    },
+                    "meta": {
+                        "$ref": "#/components/schemas/PaginationMeta"
+                    }
+                },
+                "type": "object"
+            },
+            "ArticleSingleResponse": {
+                "required": [
+                    "data"
+                ],
+                "properties": {
+                    "data": {
+                        "$ref": "#/components/schemas/ArticleDetail"
+                    }
+                },
+                "type": "object"
+            },
+            "SnippetSummary": {
+                "required": [
+                    "id",
+                    "title",
+                    "slug",
+                    "description",
+                    "language",
+                    "status",
+                    "views",
+                    "likes",
+                    "author",
+                    "tags",
+                    "created_at"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "slug": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "language": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "draft",
+                            "published",
+                            "archived"
+                        ]
+                    },
+                    "views": {
+                        "type": "integer"
+                    },
+                    "likes": {
+                        "type": "integer"
+                    },
+                    "published_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "author": {
+                        "$ref": "#/components/schemas/AuthorSummary"
+                    },
+                    "tags": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/TagResource"
+                        }
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "SnippetDetail": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/SnippetSummary"
+                    },
+                    {
+                        "properties": {
+                            "code": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
+            },
+            "SnippetCollectionResponse": {
+                "required": [
+                    "data",
+                    "meta"
+                ],
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SnippetSummary"
+                        }
+                    },
+                    "meta": {
+                        "$ref": "#/components/schemas/PaginationMeta"
+                    }
+                },
+                "type": "object"
+            },
+            "SnippetSingleResponse": {
+                "required": [
+                    "data"
+                ],
+                "properties": {
+                    "data": {
+                        "$ref": "#/components/schemas/SnippetDetail"
+                    }
+                },
+                "type": "object"
+            },
+            "ArticleUpsertRequest": {
+                "required": [
+                    "title",
+                    "excerpt",
+                    "content"
+                ],
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "excerpt": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "draft",
+                            "published",
+                            "archived"
+                        ]
+                    },
+                    "published_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "tags": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "SnippetUpsertRequest": {
+                "required": [
+                    "title",
+                    "code",
+                    "language"
+                ],
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "language": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "draft",
+                            "published",
+                            "archived"
+                        ]
+                    },
+                    "published_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "tags": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "AuthRegisterRequest": {
+                "required": [
+                    "name",
+                    "email",
+                    "password",
+                    "password_confirmation"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "minLength": 8
+                    },
+                    "password_confirmation": {
+                        "type": "string",
+                        "minLength": 8
+                    }
+                },
+                "type": "object"
+            },
+            "AuthLoginRequest": {
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "minLength": 8
+                    }
+                },
+                "type": "object"
+            },
+            "AuthData": {
+                "required": [
+                    "user",
+                    "token"
+                ],
+                "properties": {
+                    "user": {
+                        "$ref": "#/components/schemas/UserSummary"
+                    },
+                    "token": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "AuthResponse": {
+                "required": [
+                    "message",
+                    "data"
+                ],
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/AuthData"
+                    }
+                },
+                "type": "object"
+            },
+            "MessageResponse": {
+                "required": [
+                    "message"
+                ],
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "ValidationErrorResponse": {
+                "required": [
+                    "message",
+                    "errors"
+                ],
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Validation failed"
+                    },
+                    "errors": {
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            }
+        },
         "securitySchemes": {
             "bearerAuth": {
                 "type": "http",

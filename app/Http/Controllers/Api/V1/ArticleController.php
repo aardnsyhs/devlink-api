@@ -30,37 +30,7 @@ class ArticleController extends Controller
    *     @OA\Response(
    *         response=200,
    *         description="List of articles",
-   *         @OA\JsonContent(
-   *             @OA\Property(
-   *                 property="data",
-   *                 type="array",
-   *                 @OA\Items(
-   *                     type="object",
-   *                     @OA\Property(property="id", type="integer"),
-   *                     @OA\Property(property="title", type="string"),
-   *                     @OA\Property(property="slug", type="string"),
-   *                     @OA\Property(property="excerpt", type="string"),
-   *                     @OA\Property(property="status", type="string", enum={"draft","published","archived"}),
-   *                     @OA\Property(property="views", type="integer"),
-   *                     @OA\Property(property="published_at", type="string", format="date-time", nullable=true),
-   *                     @OA\Property(
-   *                         property="author",
-   *                         type="object",
-   *                         @OA\Property(property="id", type="integer"),
-   *                         @OA\Property(property="name", type="string")
-   *                     ),
-   *                     @OA\Property(property="tags", type="array", @OA\Items(type="object"))
-   *                 )
-   *             ),
-   *             @OA\Property(
-   *                 property="meta",
-   *                 type="object",
-   *                 @OA\Property(property="current_page", type="integer"),
-   *                 @OA\Property(property="per_page", type="integer"),
-   *                 @OA\Property(property="total", type="integer"),
-   *                 @OA\Property(property="last_page", type="integer")
-   *             )
-   *         )
+   *         @OA\JsonContent(ref="#/components/schemas/ArticleCollectionResponse")
    *     )
    * )
    */
@@ -84,26 +54,12 @@ class ArticleController extends Controller
    *     @OA\Response(
    *         response=200,
    *         description="Article detail",
-   *         @OA\JsonContent(
-   *             @OA\Property(property="data", type="object",
-   *                 @OA\Property(property="id", type="integer"),
-   *                 @OA\Property(property="title", type="string"),
-   *                 @OA\Property(property="slug", type="string"),
-   *                 @OA\Property(property="excerpt", type="string"),
-   *                 @OA\Property(property="content", type="string"),
-   *                 @OA\Property(property="status", type="string", enum={"draft","published","archived"}),
-   *                 @OA\Property(property="views", type="integer"),
-   *                 @OA\Property(property="published_at", type="string", format="date-time", nullable=true),
-   *                 @OA\Property(property="created_at", type="string", format="date-time"),
-   *                 @OA\Property(property="author", type="object"),
-   *                 @OA\Property(property="tags", type="array", @OA\Items(type="object"))
-   *             )
-   *         )
+   *         @OA\JsonContent(ref="#/components/schemas/ArticleSingleResponse")
    *     ),
    *     @OA\Response(
    *         response=404,
    *         description="Not found",
-   *         @OA\JsonContent(@OA\Property(property="message", type="string", example="Resource not found"))
+   *         @OA\JsonContent(ref="#/components/schemas/MessageResponse")
    *     )
    * )
    */
@@ -121,31 +77,24 @@ class ArticleController extends Controller
    *     tags={"Articles"},
    *     summary="Create new article",
    *     security={{"bearerAuth":{}}},
-   *     @OA\RequestBody(required=true,
-   *         @OA\JsonContent(
-   *             required={"title","excerpt","content"},
-   *             @OA\Property(property="title", type="string"),
-   *             @OA\Property(property="excerpt", type="string"),
-   *             @OA\Property(property="content", type="string"),
-   *             @OA\Property(property="status", type="string", enum={"draft","published","archived"}),
-   *             @OA\Property(property="published_at", type="string", format="date-time", nullable=true),
-   *             @OA\Property(property="tags", type="array", @OA\Items(type="integer"))
-   *         )
+   *     @OA\RequestBody(
+   *         required=true,
+   *         @OA\JsonContent(ref="#/components/schemas/ArticleUpsertRequest")
    *     ),
    *     @OA\Response(
    *         response=201,
    *         description="Article created",
-   *         @OA\JsonContent(@OA\Property(property="data", type="object"))
+   *         @OA\JsonContent(ref="#/components/schemas/ArticleSingleResponse")
    *     ),
    *     @OA\Response(
    *         response=401,
    *         description="Unauthenticated",
-   *         @OA\JsonContent(@OA\Property(property="message", type="string", example="Unauthenticated"))
+   *         @OA\JsonContent(ref="#/components/schemas/MessageResponse")
    *     ),
    *     @OA\Response(
    *         response=422,
    *         description="Validation error",
-   *         @OA\JsonContent(@OA\Property(property="message", type="string"), @OA\Property(property="errors", type="object"))
+   *         @OA\JsonContent(ref="#/components/schemas/ValidationErrorResponse")
    *     )
    * )
    */
@@ -170,36 +119,29 @@ class ArticleController extends Controller
    *     summary="Update article",
    *     security={{"bearerAuth":{}}},
    *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-   *     @OA\RequestBody(required=true,
-   *         @OA\JsonContent(
-   *             required={"title","excerpt","content"},
-   *             @OA\Property(property="title", type="string"),
-   *             @OA\Property(property="excerpt", type="string"),
-   *             @OA\Property(property="content", type="string"),
-   *             @OA\Property(property="status", type="string", enum={"draft","published","archived"}),
-   *             @OA\Property(property="published_at", type="string", format="date-time", nullable=true),
-   *             @OA\Property(property="tags", type="array", @OA\Items(type="integer"))
-   *         )
+   *     @OA\RequestBody(
+   *         required=true,
+   *         @OA\JsonContent(ref="#/components/schemas/ArticleUpsertRequest")
    *     ),
    *     @OA\Response(
    *         response=200,
    *         description="Article updated",
-   *         @OA\JsonContent(@OA\Property(property="data", type="object"))
+   *         @OA\JsonContent(ref="#/components/schemas/ArticleSingleResponse")
    *     ),
    *     @OA\Response(
    *         response=401,
    *         description="Unauthenticated",
-   *         @OA\JsonContent(@OA\Property(property="message", type="string", example="Unauthenticated"))
+   *         @OA\JsonContent(ref="#/components/schemas/MessageResponse")
    *     ),
    *     @OA\Response(
    *         response=403,
    *         description="Forbidden",
-   *         @OA\JsonContent(@OA\Property(property="message", type="string"))
+   *         @OA\JsonContent(ref="#/components/schemas/MessageResponse")
    *     ),
    *     @OA\Response(
    *         response=422,
    *         description="Validation error",
-   *         @OA\JsonContent(@OA\Property(property="message", type="string"), @OA\Property(property="errors", type="object"))
+   *         @OA\JsonContent(ref="#/components/schemas/ValidationErrorResponse")
    *     )
    * )
    */
@@ -226,12 +168,12 @@ class ArticleController extends Controller
    *     @OA\Response(
    *         response=401,
    *         description="Unauthenticated",
-   *         @OA\JsonContent(@OA\Property(property="message", type="string", example="Unauthenticated"))
+   *         @OA\JsonContent(ref="#/components/schemas/MessageResponse")
    *     ),
    *     @OA\Response(
    *         response=403,
    *         description="Forbidden",
-   *         @OA\JsonContent(@OA\Property(property="message", type="string"))
+   *         @OA\JsonContent(ref="#/components/schemas/MessageResponse")
    *     )
    * )
    */
