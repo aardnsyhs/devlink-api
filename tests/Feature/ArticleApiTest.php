@@ -49,3 +49,33 @@ it('can create article when authenticated', function () {
     ->assertCreated()
     ->assertJsonPath('data.title', $payload['title']);
 });
+
+it('can filter articles by search keyword', function () {
+  $keyword = 'kw-' . uniqid();
+
+  $matched = Article::factory()->published()->create([
+    'title' => 'Article ' . $keyword,
+  ]);
+  $notMatched = Article::factory()->published()->create([
+    'title' => 'Article without keyword',
+  ]);
+
+  $response = $this->getJson('/api/v1/articles?search=' . $keyword)
+    ->assertOk();
+
+  $slugs = collect($response->json('data'))->pluck('slug');
+  expect($slugs)->toContain($matched->slug);
+  expect($slugs)->not->toContain($notMatched->slug);
+});
+
+it('can paginate articles with per_page parameter', function () {
+  Article::factory(4)->published()->create();
+
+  $response = $this->getJson('/api/v1/articles?per_page=2')
+    ->assertOk();
+  $perPage = $response->json('meta.per_page');
+  $perPage = (int) (is_array($perPage) ? end($perPage) : $perPage);
+
+  expect($perPage)->toBe(2);
+  expect(count($response->json('data')))->toBe(2);
+});

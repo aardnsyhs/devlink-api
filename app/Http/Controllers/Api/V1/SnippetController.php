@@ -72,6 +72,8 @@ class SnippetController extends Controller
    */
   public function store(SnippetRequest $request): JsonResponse
   {
+    $this->authorize('create', Snippet::class);
+
     $snippet = $this->snippetService->create(
       $request->validated(),
       $request->user()->id

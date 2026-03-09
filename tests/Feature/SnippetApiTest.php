@@ -56,3 +56,45 @@ it('can create snippet when authenticated', function () {
     ->assertJsonPath('data.title', $payload['title'])
     ->assertJsonPath('data.language', $payload['language']);
 });
+
+it('can filter snippets by language', function () {
+  $phpSnippet = Snippet::factory()->published()->create(['language' => 'php']);
+  $jsSnippet = Snippet::factory()->published()->create(['language' => 'javascript']);
+
+  $response = $this->getJson('/api/v1/snippets?language=php')
+    ->assertOk();
+
+  $ids = collect($response->json('data'))->pluck('id');
+  expect($ids)->toContain($phpSnippet->id);
+  expect($ids)->not->toContain($jsSnippet->id);
+});
+
+it('can filter snippets by search keyword', function () {
+  $keyword = 'kw-' . uniqid();
+
+  $matched = Snippet::factory()->published()->create([
+    'title' => 'Snippet ' . $keyword,
+  ]);
+  $notMatched = Snippet::factory()->published()->create([
+    'title' => 'Snippet without keyword',
+  ]);
+
+  $response = $this->getJson('/api/v1/snippets?search=' . $keyword)
+    ->assertOk();
+
+  $slugs = collect($response->json('data'))->pluck('slug');
+  expect($slugs)->toContain($matched->slug);
+  expect($slugs)->not->toContain($notMatched->slug);
+});
+
+it('can paginate snippets with per_page parameter', function () {
+  Snippet::factory(4)->published()->create();
+
+  $response = $this->getJson('/api/v1/snippets?per_page=2')
+    ->assertOk();
+  $perPage = $response->json('meta.per_page');
+  $perPage = (int) (is_array($perPage) ? end($perPage) : $perPage);
+
+  expect($perPage)->toBe(2);
+  expect(count($response->json('data')))->toBe(2);
+});

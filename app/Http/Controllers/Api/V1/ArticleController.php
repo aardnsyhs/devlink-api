@@ -70,6 +70,8 @@ class ArticleController extends Controller
    */
   public function store(ArticleRequest $request): JsonResponse
   {
+    $this->authorize('create', Article::class);
+
     $article = $this->articleService->create(
       $request->validated(),
       $request->user()->id
