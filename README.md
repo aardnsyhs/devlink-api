@@ -1,5 +1,10 @@
 # DevLink API
 
+![Tests](https://github.com/aardnsyhs/devlink-api/actions/workflows/tests.yml/badge.svg)
+![PHP](https://img.shields.io/badge/PHP-8.2+-blue)
+![Laravel](https://img.shields.io/badge/Laravel-11.x-red)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 REST API for articles and code snippets built with Laravel 11.
 
 ## Tech Stack
@@ -38,7 +43,7 @@ REST API for articles and code snippets built with Laravel 11.
 ## Quick Start
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/aardnsyhs/devlink-api.git
 cd devlink-api
 composer install
 cp .env.example .env
