@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Repositories\Interfaces\ArticleRepositoryInterface;
-use Illuminate\Auth\Access\AuthorizationException;
 
 class ArticleService
 {
@@ -39,11 +38,8 @@ class ArticleService
     return $article->load(['user', 'tags']);
   }
 
-  public function update(int $id, array $data, int $userId)
+  public function update(int $id, array $data)
   {
-    $article = $this->articleRepository->findById($id);
-    $this->authorizeOwner((int) $article->user_id, $userId);
-
     if (isset($data['status']) && $data['status'] === 'published') {
       $data['published_at'] ??= now();
     }
@@ -57,18 +53,8 @@ class ArticleService
     return $article->load(['user', 'tags']);
   }
 
-  public function delete(int $id, int $userId): bool
+  public function delete(int $id): bool
   {
-    $article = $this->articleRepository->findById($id);
-    $this->authorizeOwner((int) $article->user_id, $userId);
-
     return $this->articleRepository->delete($id);
-  }
-
-  private function authorizeOwner(int $ownerId, int $userId): void
-  {
-    if ($ownerId !== $userId) {
-      throw new AuthorizationException('You are not allowed to modify this resource.');
-    }
   }
 }

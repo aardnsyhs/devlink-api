@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SnippetRequest;
 use App\Http\Resources\SnippetCollection;
 use App\Http\Resources\SnippetResource;
+use App\Models\Snippet;
 use App\Services\SnippetService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -91,12 +92,13 @@ class SnippetController extends Controller
    *     @OA\Response(response=200, description="Snippet updated")
    * )
    */
-  public function update(SnippetRequest $request, int $id): SnippetResource
+  public function update(SnippetRequest $request, Snippet $snippet): SnippetResource
   {
+    $this->authorize('update', $snippet);
+
     $snippet = $this->snippetService->update(
-      $id,
-      $request->validated(),
-      $request->user()->id
+      $snippet->id,
+      $request->validated()
     );
 
     return new SnippetResource($snippet);
@@ -112,9 +114,10 @@ class SnippetController extends Controller
    *     @OA\Response(response=204, description="Deleted")
    * )
    */
-  public function destroy(int $id): JsonResponse
+  public function destroy(Snippet $snippet): JsonResponse
   {
-    $this->snippetService->delete($id, request()->user()->id);
+    $this->authorize('delete', $snippet);
+    $this->snippetService->delete($snippet->id);
 
     return response()->json(null, 204);
   }

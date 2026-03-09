@@ -2,8 +2,13 @@
 
 namespace App\Providers;
 
+use App\Models\Article;
+use App\Models\Snippet;
+use App\Policies\ArticlePolicy;
+use App\Policies\SnippetPolicy;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,6 +26,9 @@ class AppServiceProvider extends ServiceProvider
    */
   public function boot(): void
   {
+    Gate::policy(Article::class, ArticlePolicy::class);
+    Gate::policy(Snippet::class, SnippetPolicy::class);
+
     RateLimiter::for('api', function ($request) {
       return $request->user()
         ? Limit::perMinute(120)->by($request->user()->id)

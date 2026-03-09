@@ -13,7 +13,7 @@ jobs:
           MYSQL_DATABASE: devlink_test
           MYSQL_ROOT_PASSWORD: password
         ports: ["3306:3306"]
-        options: --health-cmd="mysqladmin ping" --health-interval=10s
+        options: --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -ppassword" --health-interval=10s --health-timeout=5s --health-retries=5
 
     steps:
       - uses: actions/checkout@v4
@@ -22,7 +22,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.3"
-          extensions: mbstring, pdo_mysql
+          extensions: mbstring, pdo_mysql, xdebug
+          coverage: xdebug
 
       - name: Install dependencies
         run: composer install --no-interaction
@@ -38,9 +39,18 @@ jobs:
         env:
           DB_CONNECTION: mysql
           DB_HOST: 127.0.0.1
+          DB_PORT: 3306
           DB_DATABASE: devlink_test
           DB_USERNAME: root
-          DB_PASSWORD: root
+          DB_PASSWORD: password
 
       - name: Run tests
         run: php artisan test --coverage
+        env:
+          XDEBUG_MODE: coverage
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: devlink_test
+          DB_USERNAME: root
+          DB_PASSWORD: password

@@ -7,6 +7,7 @@ use App\Http\Requests\ArticleRequest;
 use App\Http\Resources\ArticleCollection;
 use App\Http\Resources\ArticleResource;
 use App\Jobs\IncrementArticleViews;
+use App\Models\Article;
 use App\Services\ArticleService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -89,12 +90,13 @@ class ArticleController extends Controller
    *     @OA\Response(response=200, description="Article updated")
    * )
    */
-  public function update(ArticleRequest $request, int $id): ArticleResource
+  public function update(ArticleRequest $request, Article $article): ArticleResource
   {
+    $this->authorize('update', $article);
+
     $article = $this->articleService->update(
-      $id,
-      $request->validated(),
-      $request->user()->id
+      $article->id,
+      $request->validated()
     );
 
     return new ArticleResource($article);
@@ -110,9 +112,10 @@ class ArticleController extends Controller
    *     @OA\Response(response=204, description="Deleted")
    * )
    */
-  public function destroy(int $id): JsonResponse
+  public function destroy(Article $article): JsonResponse
   {
-    $this->articleService->delete($id, request()->user()->id);
+    $this->authorize('delete', $article);
+    $this->articleService->delete($article->id);
 
     return response()->json(null, 204);
   }
