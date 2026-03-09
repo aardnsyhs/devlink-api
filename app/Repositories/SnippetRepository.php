@@ -14,9 +14,17 @@ class SnippetRepository implements SnippetRepositoryInterface
 
   public function getAll(array $filters = []): LengthAwarePaginator
   {
+    $status = $filters['status'] ?? null;
+
     return $this->model
       ->with(['user:id,name', 'tags'])
-      ->published()
+      ->when(
+        in_array($status, ['draft', 'published', 'archived'], true),
+        fn($q) => $status === 'published'
+          ? $q->published()
+          : $q->where('status', $status),
+        fn($q) => $q->published()
+      )
       ->when($filters['language'] ?? null, fn($q, $v) => $q->where('language', $v))
       ->when($filters['search'] ?? null, fn($q, $v) => $q->where('title', 'like', "%{$v}%"))
       ->latest('published_at')

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\SendWelcomeEmail;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -15,6 +16,8 @@ class AuthService
       'email' => $data['email'],
       'password' => Hash::make($data['password']),
     ]);
+
+    SendWelcomeEmail::dispatch($user->id);
 
     $token = $user->createToken('api-token')->plainTextToken;
 

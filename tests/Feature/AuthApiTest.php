@@ -1,6 +1,8 @@
 <?php
 
+use App\Jobs\SendWelcomeEmail;
 use App\Models\User;
+use Illuminate\Support\Facades\Queue;
 
 it('can register a new user', function () {
   $payload = [
@@ -19,6 +21,22 @@ it('can register a new user', function () {
         'token',
       ],
     ]);
+});
+
+it('dispatches welcome email job on register', function () {
+  Queue::fake();
+
+  $payload = [
+    'name' => 'Queue User',
+    'email' => 'queueuser@example.com',
+    'password' => 'password123',
+    'password_confirmation' => 'password123',
+  ];
+
+  $this->postJson('/api/v1/auth/register', $payload)
+    ->assertCreated();
+
+  Queue::assertPushed(SendWelcomeEmail::class);
 });
 
 it('can login with valid credentials', function () {

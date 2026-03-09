@@ -68,6 +68,18 @@ it('can filter articles by search keyword', function () {
   expect($slugs)->not->toContain($notMatched->slug);
 });
 
+it('can filter articles by status', function () {
+  $draftArticle = Article::factory()->create(['status' => 'draft']);
+  $publishedArticle = Article::factory()->published()->create();
+
+  $response = $this->getJson('/api/v1/articles?status=draft')
+    ->assertOk();
+
+  $slugs = collect($response->json('data'))->pluck('slug');
+  expect($slugs)->toContain($draftArticle->slug);
+  expect($slugs)->not->toContain($publishedArticle->slug);
+});
+
 it('can paginate articles with per_page parameter', function () {
   Article::factory(4)->published()->create();
 

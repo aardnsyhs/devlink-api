@@ -87,6 +87,18 @@ it('can filter snippets by search keyword', function () {
   expect($slugs)->not->toContain($notMatched->slug);
 });
 
+it('can filter snippets by status', function () {
+  $draftSnippet = Snippet::factory()->create(['status' => 'draft']);
+  $publishedSnippet = Snippet::factory()->published()->create();
+
+  $response = $this->getJson('/api/v1/snippets?status=draft')
+    ->assertOk();
+
+  $ids = collect($response->json('data'))->pluck('id');
+  expect($ids)->toContain($draftSnippet->id);
+  expect($ids)->not->toContain($publishedSnippet->id);
+});
+
 it('can paginate snippets with per_page parameter', function () {
   Snippet::factory(4)->published()->create();
 
