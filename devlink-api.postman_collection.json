@@ -1,0 +1,830 @@
+{
+    "info": {
+        "_postman_id": "devlink-api-collection",
+        "name": "DevLink API",
+        "description": "Developer Resource Hub API - Laravel Sanctum Authentication\n\nBase URL: {{base_url}}/api/v1",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:8000",
+            "type": "string"
+        },
+        {
+            "key": "token",
+            "value": "",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "Auth",
+            "description": "Authentication endpoints (register, login, logout)",
+            "item": [
+                {
+                    "name": "Register",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "if (pm.response.code === 201) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.collectionVariables.set('token', jsonData.data.token);",
+                                    "    pm.test('User registered successfully', function () {",
+                                    "        pm.expect(jsonData.message).to.eql('User registered successfully');",
+                                    "        pm.expect(jsonData.data.user).to.have.property('id');",
+                                    "        pm.expect(jsonData.data.user).to.have.property('name');",
+                                    "        pm.expect(jsonData.data.user).to.have.property('email');",
+                                    "        pm.expect(jsonData.data).to.have.property('token');",
+                                    "    });",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/auth/register",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "v1", "auth", "register"]
+                        },
+                        "description": "Register a new user account. Returns user data and bearer token."
+                    },
+                    "response": [
+                        {
+                            "name": "Success (201)",
+                            "status": "Created",
+                            "code": 201,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"message\": \"User registered successfully\",\n    \"data\": {\n        \"user\": {\n            \"id\": 1,\n            \"name\": \"John Doe\",\n            \"email\": \"john@example.com\"\n        },\n        \"token\": \"1|abc123token...\"\n    }\n}"
+                        },
+                        {
+                            "name": "Validation Error (422)",
+                            "status": "Unprocessable Entity",
+                            "code": 422,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"message\": \"The email has already been taken.\",\n    \"errors\": {\n        \"email\": [\n            \"The email has already been taken.\"\n        ]\n    }\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.collectionVariables.set('token', jsonData.data.token);",
+                                    "    pm.test('Login successful', function () {",
+                                    "        pm.expect(jsonData.message).to.eql('Login successful');",
+                                    "        pm.expect(jsonData.data.user).to.have.property('id');",
+                                    "        pm.expect(jsonData.data).to.have.property('token');",
+                                    "    });",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/auth/login",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "v1", "auth", "login"]
+                        },
+                        "description": "Login with email and password. Returns user data and bearer token.\n\nThe token is automatically saved to collection variables."
+                    },
+                    "response": [
+                        {
+                            "name": "Success (200)",
+                            "status": "OK",
+                            "code": 200,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"message\": \"Login successful\",\n    \"data\": {\n        \"user\": {\n            \"id\": 1,\n            \"name\": \"John Doe\",\n            \"email\": \"john@example.com\"\n        },\n        \"token\": \"2|xyz456token...\"\n    }\n}"
+                        },
+                        {
+                            "name": "Invalid Credentials (422)",
+                            "status": "Unprocessable Entity",
+                            "code": 422,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"message\": \"The provided credentials are incorrect.\",\n    \"errors\": {\n        \"email\": [\n            \"The provided credentials are incorrect.\"\n        ]\n    }\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/auth/logout",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "v1", "auth", "logout"]
+                        },
+                        "description": "Logout the authenticated user. Revokes the current access token.\n\nRequires Bearer token authentication."
+                    },
+                    "response": [
+                        {
+                            "name": "Success (200)",
+                            "status": "OK",
+                            "code": 200,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"message\": \"Logged out successfully\"\n}"
+                        },
+                        {
+                            "name": "Unauthenticated (401)",
+                            "status": "Unauthorized",
+                            "code": 401,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"message\": \"Unauthenticated.\"\n}"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Articles",
+            "description": "Article CRUD endpoints. Public: index, show. Authenticated: store, update, delete.",
+            "item": [
+                {
+                    "name": "Get All Articles",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/articles?search=&status=&per_page=15",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "v1", "articles"],
+                            "query": [
+                                {
+                                    "key": "search",
+                                    "value": "",
+                                    "description": "Search in title and content",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "status",
+                                    "value": "",
+                                    "description": "Filter by status: draft, published, archived",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "per_page",
+                                    "value": "15",
+                                    "description": "Number of items per page (default: 15)",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "description": "Get a paginated list of articles. Supports search and status filtering.\n\nNo authentication required."
+                    },
+                    "response": [
+                        {
+                            "name": "Success (200)",
+                            "status": "OK",
+                            "code": 200,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"title\": \"Getting Started with Laravel\",\n            \"slug\": \"getting-started-with-laravel-abc123\",\n            \"excerpt\": \"A beginner's guide to Laravel framework\",\n            \"status\": \"published\",\n            \"views\": 42,\n            \"published_at\": \"2026-03-09T04:43:11.000000Z\",\n            \"author\": {\n                \"id\": 1,\n                \"name\": \"John Doe\"\n            },\n            \"tags\": [\n                {\n                    \"id\": 1,\n                    \"name\": \"Laravel\",\n                    \"slug\": \"laravel\"\n                }\n            ],\n            \"created_at\": \"2026-03-09T04:43:11.000000Z\"\n        }\n    ],\n    \"meta\": {\n        \"current_page\": 1,\n        \"per_page\": 15,\n        \"total\": 1,\n        \"last_page\": 1\n    }\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Get Article by Slug",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/articles/:slug",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "v1", "articles", ":slug"],
+                            "variable": [
+                                {
+                                    "key": "slug",
+                                    "value": "getting-started-with-laravel-abc123",
+                                    "description": "Article slug"
+                                }
+                            ]
+                        },
+                        "description": "Get a single article by its slug. Includes full content.\n\nNo authentication required. Increments view counter asynchronously."
+                    },
+                    "response": [
+                        {
+                            "name": "Success (200)",
+                            "status": "OK",
+                            "code": 200,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"data\": {\n        \"id\": 1,\n        \"title\": \"Getting Started with Laravel\",\n        \"slug\": \"getting-started-with-laravel-abc123\",\n        \"excerpt\": \"A beginner's guide to Laravel framework\",\n        \"content\": \"Full article content here...\",\n        \"status\": \"published\",\n        \"views\": 43,\n        \"published_at\": \"2026-03-09T04:43:11.000000Z\",\n        \"author\": {\n            \"id\": 1,\n            \"name\": \"John Doe\"\n        },\n        \"tags\": [\n            {\n                \"id\": 1,\n                \"name\": \"Laravel\",\n                \"slug\": \"laravel\"\n            }\n        ],\n        \"created_at\": \"2026-03-09T04:43:11.000000Z\"\n    }\n}"
+                        },
+                        {
+                            "name": "Not Found (404)",
+                            "status": "Not Found",
+                            "code": 404,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"message\": \"Resource not found\"\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Create Article",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"My New Article\",\n    \"excerpt\": \"A short summary of the article\",\n    \"content\": \"Full article content goes here...\",\n    \"status\": \"published\",\n    \"published_at\": \"2026-03-09T10:00:00.000000Z\",\n    \"tags\": [1, 2]\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/articles",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "v1", "articles"]
+                        },
+                        "description": "Create a new article. Requires authentication.\n\nSlug is auto-generated from the title.\n\nFields:\n- title (required, max:255)\n- excerpt (required, max:500)\n- content (required)\n- status (optional: draft, published, archived)\n- published_at (optional, ISO 8601 datetime)\n- tags (optional, array of tag IDs)"
+                    },
+                    "response": [
+                        {
+                            "name": "Success (201)",
+                            "status": "Created",
+                            "code": 201,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"data\": {\n        \"id\": 2,\n        \"title\": \"My New Article\",\n        \"slug\": \"my-new-article-xyz789\",\n        \"excerpt\": \"A short summary of the article\",\n        \"content\": \"Full article content goes here...\",\n        \"status\": \"published\",\n        \"views\": 0,\n        \"published_at\": \"2026-03-09T10:00:00.000000Z\",\n        \"author\": {\n            \"id\": 1,\n            \"name\": \"John Doe\"\n        },\n        \"tags\": [\n            {\n                \"id\": 1,\n                \"name\": \"Laravel\",\n                \"slug\": \"laravel\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"PHP\",\n                \"slug\": \"php\"\n            }\n        ],\n        \"created_at\": \"2026-03-09T10:00:00.000000Z\"\n    }\n}"
+                        },
+                        {
+                            "name": "Validation Error (422)",
+                            "status": "Unprocessable Entity",
+                            "code": 422,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"message\": \"The title field is required.\",\n    \"errors\": {\n        \"title\": [\n            \"The title field is required.\"\n        ]\n    }\n}"
+                        },
+                        {
+                            "name": "Unauthenticated (401)",
+                            "status": "Unauthorized",
+                            "code": 401,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"message\": \"Unauthenticated.\"\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Update Article",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Updated Article Title\",\n    \"excerpt\": \"Updated excerpt\",\n    \"content\": \"Updated full content...\",\n    \"status\": \"published\",\n    \"published_at\": \"2026-03-09T12:00:00.000000Z\",\n    \"tags\": [1, 3]\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/articles/:id",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "v1", "articles", ":id"],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "Article ID"
+                                }
+                            ]
+                        },
+                        "description": "Update an existing article. Requires authentication and ownership.\n\nOnly the article owner can update it."
+                    },
+                    "response": [
+                        {
+                            "name": "Success (200)",
+                            "status": "OK",
+                            "code": 200,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"data\": {\n        \"id\": 1,\n        \"title\": \"Updated Article Title\",\n        \"slug\": \"getting-started-with-laravel-abc123\",\n        \"excerpt\": \"Updated excerpt\",\n        \"content\": \"Updated full content...\",\n        \"status\": \"published\",\n        \"views\": 43,\n        \"published_at\": \"2026-03-09T12:00:00.000000Z\",\n        \"author\": {\n            \"id\": 1,\n            \"name\": \"John Doe\"\n        },\n        \"tags\": [\n            {\n                \"id\": 1,\n                \"name\": \"Laravel\",\n                \"slug\": \"laravel\"\n            },\n            {\n                \"id\": 3,\n                \"name\": \"API\",\n                \"slug\": \"api\"\n            }\n        ],\n        \"created_at\": \"2026-03-09T04:43:11.000000Z\"\n    }\n}"
+                        },
+                        {
+                            "name": "Forbidden (403)",
+                            "status": "Forbidden",
+                            "code": 403,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"message\": \"This action is unauthorized.\"\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Delete Article",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/articles/:id",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "v1", "articles", ":id"],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "Article ID"
+                                }
+                            ]
+                        },
+                        "description": "Delete an article (soft delete). Requires authentication and ownership.\n\nOnly the article owner can delete it."
+                    },
+                    "response": [
+                        {
+                            "name": "Success (204)",
+                            "status": "No Content",
+                            "code": 204,
+                            "header": [],
+                            "body": ""
+                        },
+                        {
+                            "name": "Forbidden (403)",
+                            "status": "Forbidden",
+                            "code": 403,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"message\": \"This action is unauthorized.\"\n}"
+                        },
+                        {
+                            "name": "Unauthenticated (401)",
+                            "status": "Unauthorized",
+                            "code": 401,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"message\": \"Unauthenticated.\"\n}"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Snippets",
+            "description": "Code snippet CRUD endpoints. Public: index, show. Authenticated: store, update, delete.",
+            "item": [
+                {
+                    "name": "Get All Snippets",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/snippets?search=&status=&language=&per_page=15",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "v1", "snippets"],
+                            "query": [
+                                {
+                                    "key": "search",
+                                    "value": "",
+                                    "description": "Search in title and description",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "status",
+                                    "value": "",
+                                    "description": "Filter by status: draft, published, archived",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "language",
+                                    "value": "",
+                                    "description": "Filter by programming language",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "per_page",
+                                    "value": "15",
+                                    "description": "Number of items per page (default: 15)",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "description": "Get a paginated list of code snippets. Supports search, status, and language filtering.\n\nNo authentication required."
+                    },
+                    "response": [
+                        {
+                            "name": "Success (200)",
+                            "status": "OK",
+                            "code": 200,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"title\": \"Laravel Query Builder Example\",\n            \"slug\": \"laravel-query-builder-example-def456\",\n            \"description\": \"Example of using Laravel query builder\",\n            \"language\": \"php\",\n            \"status\": \"published\",\n            \"views\": 15,\n            \"likes\": 3,\n            \"published_at\": \"2026-03-09T04:43:20.000000Z\",\n            \"author\": {\n                \"id\": 1,\n                \"name\": \"John Doe\"\n            },\n            \"tags\": [\n                {\n                    \"id\": 1,\n                    \"name\": \"Laravel\",\n                    \"slug\": \"laravel\"\n                }\n            ],\n            \"created_at\": \"2026-03-09T04:43:20.000000Z\"\n        }\n    ],\n    \"meta\": {\n        \"current_page\": 1,\n        \"per_page\": 15,\n        \"total\": 1,\n        \"last_page\": 1\n    }\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Get Snippet by Slug",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/snippets/:slug",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "v1", "snippets", ":slug"],
+                            "variable": [
+                                {
+                                    "key": "slug",
+                                    "value": "laravel-query-builder-example-def456",
+                                    "description": "Snippet slug"
+                                }
+                            ]
+                        },
+                        "description": "Get a single snippet by its slug. Includes full code.\n\nNo authentication required. Increments view counter."
+                    },
+                    "response": [
+                        {
+                            "name": "Success (200)",
+                            "status": "OK",
+                            "code": 200,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"data\": {\n        \"id\": 1,\n        \"title\": \"Laravel Query Builder Example\",\n        \"slug\": \"laravel-query-builder-example-def456\",\n        \"description\": \"Example of using Laravel query builder\",\n        \"code\": \"<?php\\n\\n$users = DB::table('users')\\n    ->where('active', true)\\n    ->orderBy('name')\\n    ->get();\",\n        \"language\": \"php\",\n        \"status\": \"published\",\n        \"views\": 16,\n        \"likes\": 3,\n        \"published_at\": \"2026-03-09T04:43:20.000000Z\",\n        \"author\": {\n            \"id\": 1,\n            \"name\": \"John Doe\"\n        },\n        \"tags\": [\n            {\n                \"id\": 1,\n                \"name\": \"Laravel\",\n                \"slug\": \"laravel\"\n            }\n        ],\n        \"created_at\": \"2026-03-09T04:43:20.000000Z\"\n    }\n}"
+                        },
+                        {
+                            "name": "Not Found (404)",
+                            "status": "Not Found",
+                            "code": 404,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"message\": \"Resource not found\"\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Create Snippet",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"React useState Hook\",\n    \"description\": \"Basic example of useState hook in React\",\n    \"code\": \"import { useState } from 'react';\\n\\nfunction Counter() {\\n    const [count, setCount] = useState(0);\\n    return <button onClick={() => setCount(count + 1)}>{count}</button>;\\n}\",\n    \"language\": \"javascript\",\n    \"status\": \"published\",\n    \"published_at\": \"2026-03-09T10:00:00.000000Z\",\n    \"tags\": [1, 2]\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/snippets",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "v1", "snippets"]
+                        },
+                        "description": "Create a new code snippet. Requires authentication.\n\nSlug is auto-generated from the title.\n\nFields:\n- title (required, max:255)\n- description (optional, nullable)\n- code (required)\n- language (required, max:50)\n- status (optional: draft, published, archived)\n- published_at (optional, ISO 8601 datetime)\n- tags (optional, array of tag IDs)"
+                    },
+                    "response": [
+                        {
+                            "name": "Success (201)",
+                            "status": "Created",
+                            "code": 201,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"data\": {\n        \"id\": 2,\n        \"title\": \"React useState Hook\",\n        \"slug\": \"react-usestate-hook-ghi789\",\n        \"description\": \"Basic example of useState hook in React\",\n        \"code\": \"import { useState } from 'react';\\n\\nfunction Counter() {\\n    const [count, setCount] = useState(0);\\n    return <button onClick={() => setCount(count + 1)}>{count}</button>;\\n}\",\n        \"language\": \"javascript\",\n        \"status\": \"published\",\n        \"views\": 0,\n        \"likes\": 0,\n        \"published_at\": \"2026-03-09T10:00:00.000000Z\",\n        \"author\": {\n            \"id\": 1,\n            \"name\": \"John Doe\"\n        },\n        \"tags\": [\n            {\n                \"id\": 1,\n                \"name\": \"Laravel\",\n                \"slug\": \"laravel\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"PHP\",\n                \"slug\": \"php\"\n            }\n        ],\n        \"created_at\": \"2026-03-09T10:00:00.000000Z\"\n    }\n}"
+                        },
+                        {
+                            "name": "Validation Error (422)",
+                            "status": "Unprocessable Entity",
+                            "code": 422,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"message\": \"The code field is required.\",\n    \"errors\": {\n        \"code\": [\n            \"The code field is required.\"\n        ]\n    }\n}"
+                        },
+                        {
+                            "name": "Unauthenticated (401)",
+                            "status": "Unauthorized",
+                            "code": 401,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"message\": \"Unauthenticated.\"\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Update Snippet",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Updated Snippet Title\",\n    \"description\": \"Updated description\",\n    \"code\": \"// Updated code here\",\n    \"language\": \"javascript\",\n    \"status\": \"published\",\n    \"published_at\": \"2026-03-09T12:00:00.000000Z\",\n    \"tags\": [1, 3]\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/snippets/:id",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "v1", "snippets", ":id"],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "Snippet ID"
+                                }
+                            ]
+                        },
+                        "description": "Update an existing snippet. Requires authentication and ownership.\n\nOnly the snippet owner can update it."
+                    },
+                    "response": [
+                        {
+                            "name": "Success (200)",
+                            "status": "OK",
+                            "code": 200,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"data\": {\n        \"id\": 1,\n        \"title\": \"Updated Snippet Title\",\n        \"slug\": \"laravel-query-builder-example-def456\",\n        \"description\": \"Updated description\",\n        \"code\": \"// Updated code here\",\n        \"language\": \"javascript\",\n        \"status\": \"published\",\n        \"views\": 16,\n        \"likes\": 3,\n        \"published_at\": \"2026-03-09T12:00:00.000000Z\",\n        \"author\": {\n            \"id\": 1,\n            \"name\": \"John Doe\"\n        },\n        \"tags\": [\n            {\n                \"id\": 1,\n                \"name\": \"Laravel\",\n                \"slug\": \"laravel\"\n            },\n            {\n                \"id\": 3,\n                \"name\": \"API\",\n                \"slug\": \"api\"\n            }\n        ],\n        \"created_at\": \"2026-03-09T04:43:20.000000Z\"\n    }\n}"
+                        },
+                        {
+                            "name": "Forbidden (403)",
+                            "status": "Forbidden",
+                            "code": 403,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"message\": \"This action is unauthorized.\"\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Delete Snippet",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/snippets/:id",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "v1", "snippets", ":id"],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "Snippet ID"
+                                }
+                            ]
+                        },
+                        "description": "Delete a snippet (soft delete). Requires authentication and ownership.\n\nOnly the snippet owner can delete it."
+                    },
+                    "response": [
+                        {
+                            "name": "Success (204)",
+                            "status": "No Content",
+                            "code": 204,
+                            "header": [],
+                            "body": ""
+                        },
+                        {
+                            "name": "Forbidden (403)",
+                            "status": "Forbidden",
+                            "code": 403,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"message\": \"This action is unauthorized.\"\n}"
+                        },
+                        {
+                            "name": "Unauthenticated (401)",
+                            "status": "Unauthorized",
+                            "code": 401,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"message\": \"Unauthenticated.\"\n}"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
