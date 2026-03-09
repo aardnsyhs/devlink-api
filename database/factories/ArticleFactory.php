@@ -20,6 +20,7 @@ class ArticleFactory extends Factory
     return [
       'user_id' => User::factory(),
       'title' => fake()->sentence(),
+      'slug' => fake()->unique()->slug(),
       'excerpt' => fake()->paragraph(),
       'content' => fake()->paragraphs(5, true),
       'status' => 'draft',
