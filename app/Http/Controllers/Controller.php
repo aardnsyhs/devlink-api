@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use OpenApi\Annotations as OA;
+
 /**
  * @OA\Info(
  *     title="DevLink API",
  *     version="1.0.0",
  *     description="Developer Resource Hub API",
- *     @OA\Contact(email="ardiansyah@example.com"),
+ *     @OA\Contact(email="ardiansyahsulistyo@gmail.com"),
  *     @OA\License(name="MIT")
  * )
  *
