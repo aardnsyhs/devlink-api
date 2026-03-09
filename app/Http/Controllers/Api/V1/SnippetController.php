@@ -27,7 +27,43 @@ class SnippetController extends Controller
    *     @OA\Parameter(name="status", in="query", @OA\Schema(type="string", enum={"draft","published","archived"})),
    *     @OA\Parameter(name="language", in="query", @OA\Schema(type="string")),
    *     @OA\Parameter(name="per_page", in="query", @OA\Schema(type="integer", default=15)),
-   *     @OA\Response(response=200, description="List of snippets")
+   *     @OA\Response(
+   *         response=200,
+   *         description="List of snippets",
+   *         @OA\JsonContent(
+   *             @OA\Property(
+   *                 property="data",
+   *                 type="array",
+   *                 @OA\Items(
+   *                     type="object",
+   *                     @OA\Property(property="id", type="integer"),
+   *                     @OA\Property(property="title", type="string"),
+   *                     @OA\Property(property="slug", type="string"),
+   *                     @OA\Property(property="description", type="string", nullable=true),
+   *                     @OA\Property(property="language", type="string"),
+   *                     @OA\Property(property="status", type="string", enum={"draft","published","archived"}),
+   *                     @OA\Property(property="views", type="integer"),
+   *                     @OA\Property(property="likes", type="integer"),
+   *                     @OA\Property(property="published_at", type="string", format="date-time", nullable=true),
+   *                     @OA\Property(
+   *                         property="author",
+   *                         type="object",
+   *                         @OA\Property(property="id", type="integer"),
+   *                         @OA\Property(property="name", type="string")
+   *                     ),
+   *                     @OA\Property(property="tags", type="array", @OA\Items(type="object"))
+   *                 )
+   *             ),
+   *             @OA\Property(
+   *                 property="meta",
+   *                 type="object",
+   *                 @OA\Property(property="current_page", type="integer"),
+   *                 @OA\Property(property="per_page", type="integer"),
+   *                 @OA\Property(property="total", type="integer"),
+   *                 @OA\Property(property="last_page", type="integer")
+   *             )
+   *         )
+   *     )
    * )
    */
   public function index(Request $request): SnippetCollection
@@ -48,8 +84,32 @@ class SnippetController extends Controller
    *     tags={"Snippets"},
    *     summary="Get snippet by slug",
    *     @OA\Parameter(name="slug", in="path", required=true, @OA\Schema(type="string")),
-   *     @OA\Response(response=200, description="Snippet detail"),
-   *     @OA\Response(response=404, description="Not found")
+   *     @OA\Response(
+   *         response=200,
+   *         description="Snippet detail",
+   *         @OA\JsonContent(
+   *             @OA\Property(property="data", type="object",
+   *                 @OA\Property(property="id", type="integer"),
+   *                 @OA\Property(property="title", type="string"),
+   *                 @OA\Property(property="slug", type="string"),
+   *                 @OA\Property(property="description", type="string", nullable=true),
+   *                 @OA\Property(property="code", type="string"),
+   *                 @OA\Property(property="language", type="string"),
+   *                 @OA\Property(property="status", type="string", enum={"draft","published","archived"}),
+   *                 @OA\Property(property="views", type="integer"),
+   *                 @OA\Property(property="likes", type="integer"),
+   *                 @OA\Property(property="published_at", type="string", format="date-time", nullable=true),
+   *                 @OA\Property(property="created_at", type="string", format="date-time"),
+   *                 @OA\Property(property="author", type="object"),
+   *                 @OA\Property(property="tags", type="array", @OA\Items(type="object"))
+   *             )
+   *         )
+   *     ),
+   *     @OA\Response(
+   *         response=404,
+   *         description="Not found",
+   *         @OA\JsonContent(@OA\Property(property="message", type="string", example="Resource not found"))
+   *     )
    * )
    */
   public function show(string $slug): SnippetResource
@@ -66,8 +126,33 @@ class SnippetController extends Controller
    *     tags={"Snippets"},
    *     summary="Create new snippet",
    *     security={{"bearerAuth":{}}},
-   *     @OA\Response(response=201, description="Snippet created"),
-   *     @OA\Response(response=422, description="Validation error")
+   *     @OA\RequestBody(required=true,
+   *         @OA\JsonContent(
+   *             required={"title","code","language"},
+   *             @OA\Property(property="title", type="string"),
+   *             @OA\Property(property="description", type="string", nullable=true),
+   *             @OA\Property(property="code", type="string"),
+   *             @OA\Property(property="language", type="string"),
+   *             @OA\Property(property="status", type="string", enum={"draft","published","archived"}),
+   *             @OA\Property(property="published_at", type="string", format="date-time", nullable=true),
+   *             @OA\Property(property="tags", type="array", @OA\Items(type="integer"))
+   *         )
+   *     ),
+   *     @OA\Response(
+   *         response=201,
+   *         description="Snippet created",
+   *         @OA\JsonContent(@OA\Property(property="data", type="object"))
+   *     ),
+   *     @OA\Response(
+   *         response=401,
+   *         description="Unauthenticated",
+   *         @OA\JsonContent(@OA\Property(property="message", type="string", example="Unauthenticated"))
+   *     ),
+   *     @OA\Response(
+   *         response=422,
+   *         description="Validation error",
+   *         @OA\JsonContent(@OA\Property(property="message", type="string"), @OA\Property(property="errors", type="object"))
+   *     )
    * )
    */
   public function store(SnippetRequest $request): JsonResponse
@@ -91,7 +176,38 @@ class SnippetController extends Controller
    *     summary="Update snippet",
    *     security={{"bearerAuth":{}}},
    *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-   *     @OA\Response(response=200, description="Snippet updated")
+   *     @OA\RequestBody(required=true,
+   *         @OA\JsonContent(
+   *             required={"title","code","language"},
+   *             @OA\Property(property="title", type="string"),
+   *             @OA\Property(property="description", type="string", nullable=true),
+   *             @OA\Property(property="code", type="string"),
+   *             @OA\Property(property="language", type="string"),
+   *             @OA\Property(property="status", type="string", enum={"draft","published","archived"}),
+   *             @OA\Property(property="published_at", type="string", format="date-time", nullable=true),
+   *             @OA\Property(property="tags", type="array", @OA\Items(type="integer"))
+   *         )
+   *     ),
+   *     @OA\Response(
+   *         response=200,
+   *         description="Snippet updated",
+   *         @OA\JsonContent(@OA\Property(property="data", type="object"))
+   *     ),
+   *     @OA\Response(
+   *         response=401,
+   *         description="Unauthenticated",
+   *         @OA\JsonContent(@OA\Property(property="message", type="string", example="Unauthenticated"))
+   *     ),
+   *     @OA\Response(
+   *         response=403,
+   *         description="Forbidden",
+   *         @OA\JsonContent(@OA\Property(property="message", type="string"))
+   *     ),
+   *     @OA\Response(
+   *         response=422,
+   *         description="Validation error",
+   *         @OA\JsonContent(@OA\Property(property="message", type="string"), @OA\Property(property="errors", type="object"))
+   *     )
    * )
    */
   public function update(SnippetRequest $request, Snippet $snippet): SnippetResource
@@ -113,7 +229,17 @@ class SnippetController extends Controller
    *     summary="Delete snippet",
    *     security={{"bearerAuth":{}}},
    *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-   *     @OA\Response(response=204, description="Deleted")
+   *     @OA\Response(response=204, description="Deleted"),
+   *     @OA\Response(
+   *         response=401,
+   *         description="Unauthenticated",
+   *         @OA\JsonContent(@OA\Property(property="message", type="string", example="Unauthenticated"))
+   *     ),
+   *     @OA\Response(
+   *         response=403,
+   *         description="Forbidden",
+   *         @OA\JsonContent(@OA\Property(property="message", type="string"))
+   *     )
    * )
    */
   public function destroy(Snippet $snippet): JsonResponse

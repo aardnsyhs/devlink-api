@@ -44,8 +44,19 @@ jobs:
           DB_USERNAME: root
           DB_PASSWORD: password
 
+      - name: Validate OpenAPI Generation
+        run: php artisan l5-swagger:generate
+        env:
+          APP_ENV: testing
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: devlink_test
+          DB_USERNAME: root
+          DB_PASSWORD: password
+
       - name: Run tests
-        run: php artisan test --coverage
+        run: php artisan test --coverage --min=80
         env:
           XDEBUG_MODE: coverage
           DB_CONNECTION: mysql
