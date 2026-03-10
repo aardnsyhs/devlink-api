@@ -10,6 +10,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,6 +27,10 @@ class AppServiceProvider extends ServiceProvider
    */
   public function boot(): void
   {
+    if (app()->environment('production')) {
+      URL::forceScheme('https');
+    }
+
     Gate::policy(Article::class, ArticlePolicy::class);
     Gate::policy(Snippet::class, SnippetPolicy::class);
 
