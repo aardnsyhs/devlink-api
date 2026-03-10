@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use OpenApi\Annotations as OA;
 
 class AuthController extends Controller
@@ -100,5 +101,36 @@ class AuthController extends Controller
     $this->authService->logout(auth()->user());
 
     return response()->json(['message' => 'Logged out successfully']);
+  }
+
+  /**
+   * @OA\Get(
+   *     path="/api/v1/me",
+   *     tags={"Authentication"},
+   *     summary="Get authenticated user profile",
+   *     security={{"bearerAuth":{}}},
+   *     @OA\Response(
+   *         response=200,
+   *         description="Authenticated user",
+   *         @OA\JsonContent(ref="#/components/schemas/MeResponse")
+   *     ),
+   *     @OA\Response(
+   *         response=401,
+   *         description="Unauthenticated",
+   *         @OA\JsonContent(ref="#/components/schemas/MessageResponse")
+   *     )
+   * )
+   */
+  public function me(Request $request): JsonResponse
+  {
+    return response()->json([
+      'data' => [
+        'user' => [
+          'id' => $request->user()->id,
+          'name' => $request->user()->name,
+          'email' => $request->user()->email,
+        ],
+      ],
+    ]);
   }
 }

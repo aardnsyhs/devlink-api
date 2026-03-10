@@ -85,3 +85,19 @@ it('can logout authenticated user', function () {
     ->assertOk()
     ->assertJsonPath('message', 'Logged out successfully');
 });
+
+it('can get authenticated user profile', function () {
+  $user = User::factory()->create();
+  $token = $user->createToken('test')->plainTextToken;
+
+  $this->withToken($token)
+    ->getJson('/api/v1/me')
+    ->assertOk()
+    ->assertJsonPath('data.user.id', $user->id)
+    ->assertJsonPath('data.user.email', $user->email);
+});
+
+it('requires authentication to get authenticated user profile', function () {
+  $this->getJson('/api/v1/me')
+    ->assertUnauthorized();
+});

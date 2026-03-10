@@ -404,6 +404,42 @@
                 ]
             }
         },
+        "/api/v1/me": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Get authenticated user profile",
+                "operationId": "13b43df400e475a157538f73617b8c3d",
+                "responses": {
+                    "200": {
+                        "description": "Authenticated user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MeResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/v1/snippets": {
             "get": {
                 "tags": [
@@ -1405,6 +1441,25 @@
                     },
                     "data": {
                         "$ref": "#/components/schemas/AuthData"
+                    }
+                },
+                "type": "object"
+            },
+            "MeResponse": {
+                "required": [
+                    "data"
+                ],
+                "properties": {
+                    "data": {
+                        "required": [
+                            "user"
+                        ],
+                        "properties": {
+                            "user": {
+                                "$ref": "#/components/schemas/UserSummary"
+                            }
+                        },
+                        "type": "object"
                     }
                 },
                 "type": "object"

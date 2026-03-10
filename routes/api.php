@@ -23,6 +23,7 @@ Route::prefix('v1')->middleware('throttle:api')->group(function () {
 });
 
 Route::prefix('v1')->middleware(['auth:sanctum', 'throttle:api'])->group(function () {
+  Route::get('me', [AuthController::class, 'me']);
   Route::apiResource('articles', ArticleController::class)->except(['index', 'show']);
   Route::apiResource('snippets', SnippetController::class)->except(['index', 'show']);
   Route::apiResource('tags', TagController::class)->except(['index', 'show']);

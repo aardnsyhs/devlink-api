@@ -207,6 +207,18 @@ use OpenApi\Annotations as OA;
  * )
  *
  * @OA\Schema(
+ *   schema="MeResponse",
+ *   type="object",
+ *   required={"data"},
+ *   @OA\Property(
+ *     property="data",
+ *     type="object",
+ *     required={"user"},
+ *     @OA\Property(property="user", ref="#/components/schemas/UserSummary")
+ *   )
+ * )
+ *
+ * @OA\Schema(
  *   schema="MessageResponse",
  *   type="object",
  *   required={"message"},
