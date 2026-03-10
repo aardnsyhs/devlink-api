@@ -1,10 +1,21 @@
 <?php
 
 use App\Models\Tag;
+use App\Models\User;
+
+beforeEach(function () {
+  $this->user = User::factory()->create();
+  $this->token = $this->user->createToken('test')->plainTextToken;
+});
 
 it('can list tags', function () {
-  Tag::create(['name' => 'Laravel', 'slug' => 'laravel']);
-  Tag::create(['name' => 'PHP', 'slug' => 'php']);
+  $initialTotal = $this->getJson('/api/v1/tags')
+    ->assertOk()
+    ->json('meta.total');
+  $initialTotal = (int) (is_array($initialTotal) ? end($initialTotal) : $initialTotal);
+
+  Tag::create(['name' => 'Laravel ' . uniqid(), 'slug' => 'laravel-' . uniqid()]);
+  Tag::create(['name' => 'PHP ' . uniqid(), 'slug' => 'php-' . uniqid()]);
 
   $response = $this->getJson('/api/v1/tags')
     ->assertOk()
@@ -16,7 +27,7 @@ it('can list tags', function () {
   $total = $response->json('meta.total');
   $total = (int) (is_array($total) ? end($total) : $total);
 
-  expect($total)->toBe(2);
+  expect($total)->toBe($initialTotal + 2);
 });
 
 it('can filter tags by search keyword', function () {
@@ -34,9 +45,9 @@ it('can filter tags by search keyword', function () {
 });
 
 it('can paginate tags with per_page parameter', function () {
-  Tag::create(['name' => 'Laravel', 'slug' => 'laravel']);
-  Tag::create(['name' => 'PHP', 'slug' => 'php']);
-  Tag::create(['name' => 'Docker', 'slug' => 'docker']);
+  Tag::create(['name' => 'Laravel ' . uniqid(), 'slug' => 'laravel-' . uniqid()]);
+  Tag::create(['name' => 'PHP ' . uniqid(), 'slug' => 'php-' . uniqid()]);
+  Tag::create(['name' => 'Docker ' . uniqid(), 'slug' => 'docker-' . uniqid()]);
 
   $response = $this->getJson('/api/v1/tags?per_page=2')
     ->assertOk();
@@ -49,14 +60,59 @@ it('can paginate tags with per_page parameter', function () {
 });
 
 it('can show tag by slug', function () {
-  $tag = Tag::create(['name' => 'Laravel', 'slug' => 'laravel']);
+  $suffix = uniqid();
+  $tag = Tag::create(['name' => 'Laravel ' . $suffix, 'slug' => 'laravel-' . $suffix]);
 
   $this->getJson('/api/v1/tags/' . $tag->slug)
     ->assertOk()
-    ->assertJsonPath('data.slug', 'laravel');
+    ->assertJsonPath('data.slug', $tag->slug);
 });
 
 it('returns not found for unknown tag slug', function () {
   $this->getJson('/api/v1/tags/not-exist')
     ->assertNotFound();
+});
+
+it('requires authentication to create tag', function () {
+  $this->postJson('/api/v1/tags', [
+    'name' => 'DevOps',
+  ])->assertUnauthorized();
+});
+
+it('can create tag when authenticated', function () {
+  $payload = [
+    'name' => 'DevOps ' . uniqid(),
+  ];
+
+  $this->withToken($this->token)
+    ->postJson('/api/v1/tags', $payload)
+    ->assertCreated()
+    ->assertJsonPath('data.name', $payload['name']);
+});
+
+it('can update tag when authenticated', function () {
+  $tag = Tag::create([
+    'name' => 'Initial ' . uniqid(),
+    'slug' => 'initial-' . uniqid(),
+  ]);
+
+  $payload = [
+    'name' => 'Updated ' . uniqid(),
+  ];
+
+  $this->withToken($this->token)
+    ->putJson('/api/v1/tags/' . $tag->id, $payload)
+    ->assertOk()
+    ->assertJsonPath('data.name', $payload['name']);
+});
+
+it('can delete tag when authenticated', function () {
+  $tag = Tag::create([
+    'name' => 'Delete ' . uniqid(),
+    'slug' => 'delete-' . uniqid(),
+  ]);
+
+  $this->withToken($this->token)
+    ->deleteJson('/api/v1/tags/' . $tag->id)
+    ->assertNoContent();
 });

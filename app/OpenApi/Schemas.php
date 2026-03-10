@@ -166,6 +166,13 @@ use OpenApi\Annotations as OA;
  * )
  *
  * @OA\Schema(
+ *   schema="TagUpsertRequest",
+ *   type="object",
+ *   required={"name"},
+ *   @OA\Property(property="name", type="string")
+ * )
+ *
+ * @OA\Schema(
  *   schema="AuthRegisterRequest",
  *   type="object",
  *   required={"name","email","password","password_confirmation"},

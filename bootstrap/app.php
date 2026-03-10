@@ -7,6 +7,8 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -45,12 +47,33 @@ return Application::configure(basePath: dirname(__DIR__))
             }
         });
 
+        $exceptions->render(function (AccessDeniedHttpException $e, $request) {
+            if ($request->expectsJson() || $request->is('api/*')) {
+                return response()->json([
+                    'message' => 'Forbidden',
+                ], 403);
+            }
+        });
+
         $exceptions->render(function (ModelNotFoundException|NotFoundHttpException $e, $request) {
             if ($request->expectsJson() || $request->is('api/*')) {
                 return response()->json([
                     'message' => 'Resource not found',
                 ], 404);
             }
+        });
+
+        $exceptions->render(function (HttpExceptionInterface $e, $request) {
+            if (!($request->expectsJson() || $request->is('api/*'))) {
+                return null;
+            }
+
+            return match ($e->getStatusCode()) {
+                401 => response()->json(['message' => 'Unauthenticated'], 401),
+                403 => response()->json(['message' => 'Forbidden'], 403),
+                404 => response()->json(['message' => 'Resource not found'], 404),
+                default => null,
+            };
         });
 
         $exceptions->render(function (\Throwable $e, $request) {
