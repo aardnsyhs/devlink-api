@@ -1,11 +1,17 @@
 # DevLink API
 
+[![API Docs](https://img.shields.io/badge/Swagger-Live-brightgreen)](https://api.ardiansyahsulistyo.me/api/documentation)
 ![Tests](https://github.com/aardnsyhs/devlink-api/actions/workflows/tests.yml/badge.svg)
 ![PHP](https://img.shields.io/badge/PHP-8.2+-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-11.x-red)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 REST API for articles and code snippets built with Laravel 11.
+
+## API Documentation
+
+Live Swagger UI:
+**[https://api.ardiansyahsulistyo.me/api/documentation](https://api.ardiansyahsulistyo.me/api/documentation)**
 
 ## Tech Stack
 
