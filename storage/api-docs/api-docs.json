@@ -13,16 +13,14 @@
     },
     "servers": [
         {
-            "url": "http://localhost:8000/api/v1",
+            "url": "https://api.ardiansyahsulistyo.me/api/v1",
             "description": "API Server"
         }
     ],
     "paths": {
         "/api/v1/articles": {
             "get": {
-                "tags": [
-                    "Articles"
-                ],
+                "tags": ["Articles"],
                 "summary": "Get all published articles",
                 "operationId": "daffc9d151a0c7c956d1157d38e78859",
                 "parameters": [
@@ -38,11 +36,7 @@
                         "in": "query",
                         "schema": {
                             "type": "string",
-                            "enum": [
-                                "draft",
-                                "published",
-                                "archived"
-                            ]
+                            "enum": ["draft", "published", "archived"]
                         }
                     },
                     {
@@ -68,9 +62,7 @@
                 }
             },
             "post": {
-                "tags": [
-                    "Articles"
-                ],
+                "tags": ["Articles"],
                 "summary": "Create new article",
                 "operationId": "cc6dfa70b6bd098bdef0b6f644d1645c",
                 "requestBody": {
@@ -124,9 +116,7 @@
         },
         "/api/v1/articles/{slug}": {
             "get": {
-                "tags": [
-                    "Articles"
-                ],
+                "tags": ["Articles"],
                 "summary": "Get article by slug",
                 "operationId": "5116913f5b70bb0f7ab90575cfdbde20",
                 "parameters": [
@@ -165,9 +155,7 @@
         },
         "/api/v1/articles/{id}": {
             "put": {
-                "tags": [
-                    "Articles"
-                ],
+                "tags": ["Articles"],
                 "summary": "Update article",
                 "operationId": "d676310e0c9e6d3ad530166de0de4db2",
                 "parameters": [
@@ -239,9 +227,7 @@
                 ]
             },
             "delete": {
-                "tags": [
-                    "Articles"
-                ],
+                "tags": ["Articles"],
                 "summary": "Delete article",
                 "operationId": "f8b0ae1160adef90934cf1ad243bc26c",
                 "parameters": [
@@ -288,9 +274,7 @@
         },
         "/api/v1/auth/register": {
             "post": {
-                "tags": [
-                    "Authentication"
-                ],
+                "tags": ["Authentication"],
                 "summary": "Register new user",
                 "operationId": "b9e746d77661fb8df55d0ac63e1ece77",
                 "requestBody": {
@@ -329,9 +313,7 @@
         },
         "/api/v1/auth/login": {
             "post": {
-                "tags": [
-                    "Authentication"
-                ],
+                "tags": ["Authentication"],
                 "summary": "Login user",
                 "operationId": "a7997e7c1e3bfed64d4e56de82415931",
                 "requestBody": {
@@ -370,9 +352,7 @@
         },
         "/api/v1/auth/logout": {
             "post": {
-                "tags": [
-                    "Authentication"
-                ],
+                "tags": ["Authentication"],
                 "summary": "Logout authenticated user",
                 "operationId": "f6b8957b4c0b25636613a9f0512a8ba9",
                 "responses": {
@@ -406,9 +386,7 @@
         },
         "/api/v1/me": {
             "get": {
-                "tags": [
-                    "Authentication"
-                ],
+                "tags": ["Authentication"],
                 "summary": "Get authenticated user profile",
                 "operationId": "13b43df400e475a157538f73617b8c3d",
                 "responses": {
@@ -442,9 +420,7 @@
         },
         "/api/v1/snippets": {
             "get": {
-                "tags": [
-                    "Snippets"
-                ],
+                "tags": ["Snippets"],
                 "summary": "Get all published snippets",
                 "operationId": "148313d8088cb12f370658147d66bfb2",
                 "parameters": [
@@ -460,11 +436,7 @@
                         "in": "query",
                         "schema": {
                             "type": "string",
-                            "enum": [
-                                "draft",
-                                "published",
-                                "archived"
-                            ]
+                            "enum": ["draft", "published", "archived"]
                         }
                     },
                     {
@@ -497,9 +469,7 @@
                 }
             },
             "post": {
-                "tags": [
-                    "Snippets"
-                ],
+                "tags": ["Snippets"],
                 "summary": "Create new snippet",
                 "operationId": "3b7b864c4a19abe3e66d0abfdc95c1a1",
                 "requestBody": {
@@ -553,9 +523,7 @@
         },
         "/api/v1/snippets/{slug}": {
             "get": {
-                "tags": [
-                    "Snippets"
-                ],
+                "tags": ["Snippets"],
                 "summary": "Get snippet by slug",
                 "operationId": "45c1f5b3bccc4bce87d3bf4785def33f",
                 "parameters": [
@@ -594,9 +562,7 @@
         },
         "/api/v1/snippets/{id}": {
             "put": {
-                "tags": [
-                    "Snippets"
-                ],
+                "tags": ["Snippets"],
                 "summary": "Update snippet",
                 "operationId": "6f1472498dac100353fc71598f4491bf",
                 "parameters": [
@@ -668,9 +634,7 @@
                 ]
             },
             "delete": {
-                "tags": [
-                    "Snippets"
-                ],
+                "tags": ["Snippets"],
                 "summary": "Delete snippet",
                 "operationId": "44f53fe6ef8ae5cdca64d0c74335e6d4",
                 "parameters": [
@@ -717,9 +681,7 @@
         },
         "/api/v1/tags": {
             "get": {
-                "tags": [
-                    "Tags"
-                ],
+                "tags": ["Tags"],
                 "summary": "Get all tags",
                 "operationId": "e320cb59dba3e323dacbbc502509717c",
                 "parameters": [
@@ -753,9 +715,7 @@
                 }
             },
             "post": {
-                "tags": [
-                    "Tags"
-                ],
+                "tags": ["Tags"],
                 "summary": "Create new tag",
                 "operationId": "d5b48558ae6b21f20e758584734e2cd7",
                 "requestBody": {
@@ -809,9 +769,7 @@
         },
         "/api/v1/tags/{tag}": {
             "get": {
-                "tags": [
-                    "Tags"
-                ],
+                "tags": ["Tags"],
                 "summary": "Get tag by slug",
                 "operationId": "1937d4b1e540b35b8281880ee8e048cd",
                 "parameters": [
@@ -848,9 +806,7 @@
                 }
             },
             "put": {
-                "tags": [
-                    "Tags"
-                ],
+                "tags": ["Tags"],
                 "summary": "Update tag",
                 "operationId": "2f4fe8b384b5d312602ee2a65151104b",
                 "parameters": [
@@ -912,9 +868,7 @@
                 ]
             },
             "delete": {
-                "tags": [
-                    "Tags"
-                ],
+                "tags": ["Tags"],
                 "summary": "Delete tag",
                 "operationId": "17300156bba0320ee22d525aa7b0a582",
                 "parameters": [
@@ -953,11 +907,7 @@
     "components": {
         "schemas": {
             "UserSummary": {
-                "required": [
-                    "id",
-                    "name",
-                    "email"
-                ],
+                "required": ["id", "name", "email"],
                 "properties": {
                     "id": {
                         "type": "integer",
@@ -976,10 +926,7 @@
                 "type": "object"
             },
             "AuthorSummary": {
-                "required": [
-                    "id",
-                    "name"
-                ],
+                "required": ["id", "name"],
                 "properties": {
                     "id": {
                         "type": "integer",
@@ -993,11 +940,7 @@
                 "type": "object"
             },
             "TagResource": {
-                "required": [
-                    "id",
-                    "name",
-                    "slug"
-                ],
+                "required": ["id", "name", "slug"],
                 "properties": {
                     "id": {
                         "type": "integer",
@@ -1015,10 +958,7 @@
                 "type": "object"
             },
             "TagCollectionResponse": {
-                "required": [
-                    "data",
-                    "meta"
-                ],
+                "required": ["data", "meta"],
                 "properties": {
                     "data": {
                         "type": "array",
@@ -1033,9 +973,7 @@
                 "type": "object"
             },
             "TagSingleResponse": {
-                "required": [
-                    "data"
-                ],
+                "required": ["data"],
                 "properties": {
                     "data": {
                         "$ref": "#/components/schemas/TagResource"
@@ -1044,12 +982,7 @@
                 "type": "object"
             },
             "PaginationMeta": {
-                "required": [
-                    "current_page",
-                    "per_page",
-                    "total",
-                    "last_page"
-                ],
+                "required": ["current_page", "per_page", "total", "last_page"],
                 "properties": {
                     "current_page": {
                         "type": "integer",
@@ -1097,11 +1030,7 @@
                     },
                     "status": {
                         "type": "string",
-                        "enum": [
-                            "draft",
-                            "published",
-                            "archived"
-                        ]
+                        "enum": ["draft", "published", "archived"]
                     },
                     "views": {
                         "type": "integer"
@@ -1143,10 +1072,7 @@
                 ]
             },
             "ArticleCollectionResponse": {
-                "required": [
-                    "data",
-                    "meta"
-                ],
+                "required": ["data", "meta"],
                 "properties": {
                     "data": {
                         "type": "array",
@@ -1161,9 +1087,7 @@
                 "type": "object"
             },
             "ArticleSingleResponse": {
-                "required": [
-                    "data"
-                ],
+                "required": ["data"],
                 "properties": {
                     "data": {
                         "$ref": "#/components/schemas/ArticleDetail"
@@ -1204,11 +1128,7 @@
                     },
                     "status": {
                         "type": "string",
-                        "enum": [
-                            "draft",
-                            "published",
-                            "archived"
-                        ]
+                        "enum": ["draft", "published", "archived"]
                     },
                     "views": {
                         "type": "integer"
@@ -1253,10 +1173,7 @@
                 ]
             },
             "SnippetCollectionResponse": {
-                "required": [
-                    "data",
-                    "meta"
-                ],
+                "required": ["data", "meta"],
                 "properties": {
                     "data": {
                         "type": "array",
@@ -1271,9 +1188,7 @@
                 "type": "object"
             },
             "SnippetSingleResponse": {
-                "required": [
-                    "data"
-                ],
+                "required": ["data"],
                 "properties": {
                     "data": {
                         "$ref": "#/components/schemas/SnippetDetail"
@@ -1282,11 +1197,7 @@
                 "type": "object"
             },
             "ArticleUpsertRequest": {
-                "required": [
-                    "title",
-                    "excerpt",
-                    "content"
-                ],
+                "required": ["title", "excerpt", "content"],
                 "properties": {
                     "title": {
                         "type": "string"
@@ -1299,11 +1210,7 @@
                     },
                     "status": {
                         "type": "string",
-                        "enum": [
-                            "draft",
-                            "published",
-                            "archived"
-                        ]
+                        "enum": ["draft", "published", "archived"]
                     },
                     "published_at": {
                         "type": "string",
@@ -1320,11 +1227,7 @@
                 "type": "object"
             },
             "SnippetUpsertRequest": {
-                "required": [
-                    "title",
-                    "code",
-                    "language"
-                ],
+                "required": ["title", "code", "language"],
                 "properties": {
                     "title": {
                         "type": "string"
@@ -1341,11 +1244,7 @@
                     },
                     "status": {
                         "type": "string",
-                        "enum": [
-                            "draft",
-                            "published",
-                            "archived"
-                        ]
+                        "enum": ["draft", "published", "archived"]
                     },
                     "published_at": {
                         "type": "string",
@@ -1362,9 +1261,7 @@
                 "type": "object"
             },
             "TagUpsertRequest": {
-                "required": [
-                    "name"
-                ],
+                "required": ["name"],
                 "properties": {
                     "name": {
                         "type": "string"
@@ -1399,10 +1296,7 @@
                 "type": "object"
             },
             "AuthLoginRequest": {
-                "required": [
-                    "email",
-                    "password"
-                ],
+                "required": ["email", "password"],
                 "properties": {
                     "email": {
                         "type": "string",
@@ -1416,10 +1310,7 @@
                 "type": "object"
             },
             "AuthData": {
-                "required": [
-                    "user",
-                    "token"
-                ],
+                "required": ["user", "token"],
                 "properties": {
                     "user": {
                         "$ref": "#/components/schemas/UserSummary"
@@ -1431,10 +1322,7 @@
                 "type": "object"
             },
             "AuthResponse": {
-                "required": [
-                    "message",
-                    "data"
-                ],
+                "required": ["message", "data"],
                 "properties": {
                     "message": {
                         "type": "string"
@@ -1446,14 +1334,10 @@
                 "type": "object"
             },
             "MeResponse": {
-                "required": [
-                    "data"
-                ],
+                "required": ["data"],
                 "properties": {
                     "data": {
-                        "required": [
-                            "user"
-                        ],
+                        "required": ["user"],
                         "properties": {
                             "user": {
                                 "$ref": "#/components/schemas/UserSummary"
@@ -1465,9 +1349,7 @@
                 "type": "object"
             },
             "MessageResponse": {
-                "required": [
-                    "message"
-                ],
+                "required": ["message"],
                 "properties": {
                     "message": {
                         "type": "string"
@@ -1476,10 +1358,7 @@
                 "type": "object"
             },
             "ValidationErrorResponse": {
-                "required": [
-                    "message",
-                    "errors"
-                ],
+                "required": ["message", "errors"],
                 "properties": {
                     "message": {
                         "type": "string",
