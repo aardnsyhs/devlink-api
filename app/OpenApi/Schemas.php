@@ -32,6 +32,21 @@ use OpenApi\Annotations as OA;
  * )
  *
  * @OA\Schema(
+ *   schema="TagCollectionResponse",
+ *   type="object",
+ *   required={"data","meta"},
+ *   @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/TagResource")),
+ *   @OA\Property(property="meta", ref="#/components/schemas/PaginationMeta")
+ * )
+ *
+ * @OA\Schema(
+ *   schema="TagSingleResponse",
+ *   type="object",
+ *   required={"data"},
+ *   @OA\Property(property="data", ref="#/components/schemas/TagResource")
+ * )
+ *
+ * @OA\Schema(
  *   schema="PaginationMeta",
  *   type="object",
  *   required={"current_page","per_page","total","last_page"},

@@ -3,8 +3,8 @@
 namespace App\Jobs;
 
 use App\Models\Article;
-use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable;
 
 class IncrementArticleViews implements ShouldQueue
 {

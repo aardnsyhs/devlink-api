@@ -21,6 +21,7 @@ REST API for articles and code snippets built with Laravel 11.
 - Auth: register, login, logout
 - Articles: public read + authenticated CRUD
 - Snippets: public read + authenticated CRUD
+- Tags: public listing and detail by slug
 - Policy-based ownership authorization
 - Rate limiting (`auth` and `api`)
 - OpenAPI docs with reusable schemas
