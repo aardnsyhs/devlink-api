@@ -18,6 +18,6 @@ jobs:
           port: 22
           script: |
             cd /var/www/devlink-api
-            git pull origin main
+            sudo git pull origin main
             docker exec -T devlink_api_app php artisan optimize:clear
             docker restart devlink_api_queue
