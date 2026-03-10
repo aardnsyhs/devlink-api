@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SnippetRequest;
 use App\Http\Resources\SnippetCollection;
 use App\Http\Resources\SnippetResource;
+use App\Jobs\IncrementSnippetViews;
 use App\Models\Snippet;
 use App\Services\SnippetService;
 use Illuminate\Http\JsonResponse;
@@ -67,7 +68,7 @@ class SnippetController extends Controller
   public function show(string $slug): SnippetResource
   {
     $snippet = $this->snippetService->getBySlug($slug);
-    $snippet->increment('views');
+    IncrementSnippetViews::dispatch($snippet->id);
 
     return new SnippetResource($snippet->fresh(['user', 'tags']));
   }
