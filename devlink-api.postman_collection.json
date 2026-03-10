@@ -63,8 +63,15 @@
                         },
                         "url": {
                             "raw": "{{base_url}}/api/v1/auth/register",
-                            "host": ["{{base_url}}"],
-                            "path": ["api", "v1", "auth", "register"]
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "auth",
+                                "register"
+                            ]
                         },
                         "description": "Register a new user account. Returns user data and bearer token."
                     },
@@ -134,8 +141,15 @@
                         },
                         "url": {
                             "raw": "{{base_url}}/api/v1/auth/login",
-                            "host": ["{{base_url}}"],
-                            "path": ["api", "v1", "auth", "login"]
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "auth",
+                                "login"
+                            ]
                         },
                         "description": "Login with email and password. Returns user data and bearer token.\n\nThe token is automatically saved to collection variables."
                     },
@@ -182,8 +196,15 @@
                         ],
                         "url": {
                             "raw": "{{base_url}}/api/v1/auth/logout",
-                            "host": ["{{base_url}}"],
-                            "path": ["api", "v1", "auth", "logout"]
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "auth",
+                                "logout"
+                            ]
                         },
                         "description": "Logout the authenticated user. Revokes the current access token.\n\nRequires Bearer token authentication."
                     },
@@ -210,7 +231,61 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n    \"message\": \"Unauthenticated.\"\n}"
+                            "body": "{\n    \"message\": \"Unauthenticated\"\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Me",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/me",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "me"
+                            ]
+                        },
+                        "description": "Get authenticated user profile. Requires authentication."
+                    },
+                    "response": [
+                        {
+                            "name": "Success (200)",
+                            "status": "OK",
+                            "code": 200,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"data\": {\n        \"user\": {\n            \"id\": 1,\n            \"name\": \"John Doe\",\n            \"email\": \"john@example.com\"\n        }\n    }\n}"
+                        },
+                        {
+                            "name": "Unauthenticated (401)",
+                            "status": "Unauthorized",
+                            "code": 401,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"message\": \"Unauthenticated\"\n}"
                         }
                     ]
                 }
@@ -232,8 +307,14 @@
                         ],
                         "url": {
                             "raw": "{{base_url}}/api/v1/articles?search=&status=&per_page=15",
-                            "host": ["{{base_url}}"],
-                            "path": ["api", "v1", "articles"],
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "articles"
+                            ],
                             "query": [
                                 {
                                     "key": "search",
@@ -284,8 +365,15 @@
                         ],
                         "url": {
                             "raw": "{{base_url}}/api/v1/articles/:slug",
-                            "host": ["{{base_url}}"],
-                            "path": ["api", "v1", "articles", ":slug"],
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "articles",
+                                ":slug"
+                            ],
                             "variable": [
                                 {
                                     "key": "slug",
@@ -347,8 +435,14 @@
                         },
                         "url": {
                             "raw": "{{base_url}}/api/v1/articles",
-                            "host": ["{{base_url}}"],
-                            "path": ["api", "v1", "articles"]
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "articles"
+                            ]
                         },
                         "description": "Create a new article. Requires authentication.\n\nSlug is auto-generated from the title.\n\nFields:\n- title (required, max:255)\n- excerpt (required, max:500)\n- content (required)\n- status (optional: draft, published, archived)\n- published_at (optional, ISO 8601 datetime)\n- tags (optional, array of tag IDs)"
                     },
@@ -387,7 +481,7 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n    \"message\": \"Unauthenticated.\"\n}"
+                            "body": "{\n    \"message\": \"Unauthenticated\"\n}"
                         }
                     ]
                 },
@@ -415,8 +509,15 @@
                         },
                         "url": {
                             "raw": "{{base_url}}/api/v1/articles/:id",
-                            "host": ["{{base_url}}"],
-                            "path": ["api", "v1", "articles", ":id"],
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "articles",
+                                ":id"
+                            ],
                             "variable": [
                                 {
                                     "key": "id",
@@ -470,8 +571,15 @@
                         ],
                         "url": {
                             "raw": "{{base_url}}/api/v1/articles/:id",
-                            "host": ["{{base_url}}"],
-                            "path": ["api", "v1", "articles", ":id"],
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "articles",
+                                ":id"
+                            ],
                             "variable": [
                                 {
                                     "key": "id",
@@ -512,7 +620,7 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n    \"message\": \"Unauthenticated.\"\n}"
+                            "body": "{\n    \"message\": \"Unauthenticated\"\n}"
                         }
                     ]
                 }
@@ -534,8 +642,14 @@
                         ],
                         "url": {
                             "raw": "{{base_url}}/api/v1/snippets?search=&status=&language=&per_page=15",
-                            "host": ["{{base_url}}"],
-                            "path": ["api", "v1", "snippets"],
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "snippets"
+                            ],
                             "query": [
                                 {
                                     "key": "search",
@@ -592,8 +706,15 @@
                         ],
                         "url": {
                             "raw": "{{base_url}}/api/v1/snippets/:slug",
-                            "host": ["{{base_url}}"],
-                            "path": ["api", "v1", "snippets", ":slug"],
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "snippets",
+                                ":slug"
+                            ],
                             "variable": [
                                 {
                                     "key": "slug",
@@ -655,8 +776,14 @@
                         },
                         "url": {
                             "raw": "{{base_url}}/api/v1/snippets",
-                            "host": ["{{base_url}}"],
-                            "path": ["api", "v1", "snippets"]
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "snippets"
+                            ]
                         },
                         "description": "Create a new code snippet. Requires authentication.\n\nSlug is auto-generated from the title.\n\nFields:\n- title (required, max:255)\n- description (optional, nullable)\n- code (required)\n- language (required, max:50)\n- status (optional: draft, published, archived)\n- published_at (optional, ISO 8601 datetime)\n- tags (optional, array of tag IDs)"
                     },
@@ -695,7 +822,7 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n    \"message\": \"Unauthenticated.\"\n}"
+                            "body": "{\n    \"message\": \"Unauthenticated\"\n}"
                         }
                     ]
                 },
@@ -723,8 +850,15 @@
                         },
                         "url": {
                             "raw": "{{base_url}}/api/v1/snippets/:id",
-                            "host": ["{{base_url}}"],
-                            "path": ["api", "v1", "snippets", ":id"],
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "snippets",
+                                ":id"
+                            ],
                             "variable": [
                                 {
                                     "key": "id",
@@ -778,8 +912,15 @@
                         ],
                         "url": {
                             "raw": "{{base_url}}/api/v1/snippets/:id",
-                            "host": ["{{base_url}}"],
-                            "path": ["api", "v1", "snippets", ":id"],
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "snippets",
+                                ":id"
+                            ],
                             "variable": [
                                 {
                                     "key": "id",
@@ -820,7 +961,319 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n    \"message\": \"Unauthenticated.\"\n}"
+                            "body": "{\n    \"message\": \"Unauthenticated\"\n}"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Tags",
+            "item": [
+                {
+                    "name": "Get All Tags",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/tags?search=&per_page=15",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "tags"
+                            ],
+                            "query": [
+                                {
+                                    "key": "search",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "per_page",
+                                    "value": "15"
+                                }
+                            ]
+                        },
+                        "description": "Get paginated list of tags. Supports optional search and per_page."
+                    },
+                    "response": [
+                        {
+                            "name": "Success (200)",
+                            "status": "OK",
+                            "code": 200,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"Laravel\",\n            \"slug\": \"laravel\"\n        }\n    ],\n    \"meta\": {\n        \"current_page\": 1,\n        \"per_page\": 15,\n        \"total\": 1,\n        \"last_page\": 1\n    }\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Get Tag by Slug",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/tags/:tag",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "tags",
+                                ":tag"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "tag",
+                                    "value": "laravel",
+                                    "description": "Tag slug"
+                                }
+                            ]
+                        },
+                        "description": "Get tag detail by slug."
+                    },
+                    "response": [
+                        {
+                            "name": "Success (200)",
+                            "status": "OK",
+                            "code": 200,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"data\": {\n        \"id\": 1,\n        \"name\": \"Laravel\",\n        \"slug\": \"laravel\"\n    }\n}"
+                        },
+                        {
+                            "name": "Not Found (404)",
+                            "status": "Not Found",
+                            "code": 404,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"message\": \"Resource not found\"\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Create Tag",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"DevOps\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/tags",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "tags"
+                            ]
+                        },
+                        "description": "Create a new tag. Requires authentication."
+                    },
+                    "response": [
+                        {
+                            "name": "Success (201)",
+                            "status": "Created",
+                            "code": 201,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"data\": {\n        \"id\": 10,\n        \"name\": \"DevOps\",\n        \"slug\": \"devops\"\n    }\n}"
+                        },
+                        {
+                            "name": "Validation Error (422)",
+                            "status": "Unprocessable Entity",
+                            "code": 422,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"message\": \"Validation failed\",\n    \"errors\": {\n        \"name\": [\n            \"The name field is required.\"\n        ]\n    }\n}"
+                        },
+                        {
+                            "name": "Unauthenticated (401)",
+                            "status": "Unauthorized",
+                            "code": 401,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"message\": \"Unauthenticated\"\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Update Tag",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Backend\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/tags/:id",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "tags",
+                                ":id"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "10",
+                                    "description": "Tag id"
+                                }
+                            ]
+                        },
+                        "description": "Update a tag by ID. Requires authentication."
+                    },
+                    "response": [
+                        {
+                            "name": "Success (200)",
+                            "status": "OK",
+                            "code": 200,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"data\": {\n        \"id\": 10,\n        \"name\": \"Backend\",\n        \"slug\": \"backend\"\n    }\n}"
+                        },
+                        {
+                            "name": "Validation Error (422)",
+                            "status": "Unprocessable Entity",
+                            "code": 422,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"message\": \"Validation failed\",\n    \"errors\": {\n        \"name\": [\n            \"The name has already been taken.\"\n        ]\n    }\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Delete Tag",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/v1/tags/:id",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "v1",
+                                "tags",
+                                ":id"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "id",
+                                    "value": "10",
+                                    "description": "Tag id"
+                                }
+                            ]
+                        },
+                        "description": "Delete a tag by ID. Requires authentication."
+                    },
+                    "response": [
+                        {
+                            "name": "Success (204)",
+                            "status": "No Content",
+                            "code": 204,
+                            "header": [],
+                            "body": ""
+                        },
+                        {
+                            "name": "Unauthenticated (401)",
+                            "status": "Unauthorized",
+                            "code": 401,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n    \"message\": \"Unauthenticated\"\n}"
                         }
                     ]
                 }
