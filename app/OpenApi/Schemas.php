@@ -191,6 +191,16 @@ use OpenApi\Annotations as OA;
  * )
  *
  * @OA\Schema(
+ *   schema="UpdateProfileRequest",
+ *   type="object",
+ *   required={"name","email"},
+ *   @OA\Property(property="name", type="string"),
+ *   @OA\Property(property="email", type="string", format="email"),
+ *   @OA\Property(property="password", type="string", minLength=8, nullable=true),
+ *   @OA\Property(property="password_confirmation", type="string", minLength=8, nullable=true)
+ * )
+ *
+ * @OA\Schema(
  *   schema="AuthData",
  *   type="object",
  *   required={"user","token"},

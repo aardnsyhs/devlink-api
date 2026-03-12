@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\UpdateProfileRequest;
 use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -129,6 +130,49 @@ class AuthController extends Controller
           'id' => $request->user()->id,
           'name' => $request->user()->name,
           'email' => $request->user()->email,
+        ],
+      ],
+    ]);
+  }
+
+  /**
+   * @OA\Put(
+   *     path="/api/v1/me",
+   *     tags={"Authentication"},
+   *     summary="Update authenticated user profile",
+   *     security={{"bearerAuth":{}}},
+   *     @OA\RequestBody(
+   *         required=true,
+   *         @OA\JsonContent(ref="#/components/schemas/UpdateProfileRequest")
+   *     ),
+   *     @OA\Response(
+   *         response=200,
+   *         description="Profile updated successfully",
+   *         @OA\JsonContent(ref="#/components/schemas/MeResponse")
+   *     ),
+   *     @OA\Response(
+   *         response=401,
+   *         description="Unauthenticated",
+   *         @OA\JsonContent(ref="#/components/schemas/MessageResponse")
+   *     ),
+   *     @OA\Response(
+   *         response=422,
+   *         description="Validation error",
+   *         @OA\JsonContent(ref="#/components/schemas/ValidationErrorResponse")
+   *     )
+   * )
+   */
+  public function updateProfile(UpdateProfileRequest $request): JsonResponse
+  {
+    $user = $this->authService->updateProfile($request->user(), $request->validated());
+
+    return response()->json([
+      'message' => 'Profile updated successfully',
+      'data' => [
+        'user' => [
+          'id' => $user->id,
+          'name' => $user->name,
+          'email' => $user->email,
         ],
       ],
     ]);

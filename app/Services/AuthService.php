@@ -41,6 +41,22 @@ class AuthService
 
   public function logout(User $user): void
   {
-    $user->currentAccessToken()->delete();
+    $user->currentAccessToken()?->delete();
+  }
+
+  public function updateProfile(User $user, array $data): User
+  {
+    $payload = [
+      'name' => $data['name'],
+      'email' => $data['email'],
+    ];
+
+    if (!empty($data['password'])) {
+      $payload['password'] = Hash::make($data['password']);
+    }
+
+    $user->update($payload);
+
+    return $user->fresh();
   }
 }

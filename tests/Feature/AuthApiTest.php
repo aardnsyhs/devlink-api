@@ -101,3 +101,48 @@ it('requires authentication to get authenticated user profile', function () {
   $this->getJson('/api/v1/me')
     ->assertUnauthorized();
 });
+
+it('can update authenticated user profile', function () {
+  $user = User::factory()->create([
+    'name' => 'Old Name',
+    'email' => 'old-profile@example.com',
+  ]);
+  $token = $user->createToken('test')->plainTextToken;
+
+  $payload = [
+    'name' => 'New Name',
+    'email' => 'new-profile@example.com',
+  ];
+
+  $this->withToken($token)
+    ->putJson('/api/v1/me', $payload)
+    ->assertOk()
+    ->assertJsonPath('message', 'Profile updated successfully')
+    ->assertJsonPath('data.user.name', $payload['name'])
+    ->assertJsonPath('data.user.email', $payload['email']);
+});
+
+it('can update authenticated user password', function () {
+  $user = User::factory()->create([
+    'password' => 'oldpassword123',
+  ]);
+  $token = $user->createToken('test')->plainTextToken;
+
+  $this->withToken($token)
+    ->putJson('/api/v1/me', [
+      'name' => $user->name,
+      'email' => $user->email,
+      'password' => 'newpassword123',
+      'password_confirmation' => 'newpassword123',
+    ])
+    ->assertOk();
+
+  expect(\Illuminate\Support\Facades\Hash::check('newpassword123', $user->fresh()->password))->toBeTrue();
+});
+
+it('requires authentication to update authenticated user profile', function () {
+  $this->putJson('/api/v1/me', [
+    'name' => 'No Auth',
+    'email' => 'noauth@example.com',
+  ])->assertUnauthorized();
+});

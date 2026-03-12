@@ -26,7 +26,6 @@ class SnippetRepository implements SnippetRepositoryInterface
       ->when($tag, fn($q, $v) => $q->whereHas('tags', fn($tq) => $tq->where('slug', $v)));
 
     if ($status === 'all') {
-      // no status filter
     } elseif (in_array($status, ['draft', 'published', 'archived'], true)) {
       $status === 'published'
         ? $query->published()
