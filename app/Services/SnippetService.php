@@ -16,9 +16,9 @@ class SnippetService
     return $this->snippetRepository->getAll($filters);
   }
 
-  public function getBySlug(string $slug)
+  public function getBySlug(string $slug, ?int $viewerId = null)
   {
-    return $this->snippetRepository->findBySlug($slug);
+    return $this->snippetRepository->findBySlug($slug, $viewerId);
   }
 
   public function create(array $data, int $userId)

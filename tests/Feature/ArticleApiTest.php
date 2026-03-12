@@ -37,6 +37,34 @@ it('does not show unpublished article on public endpoint', function () {
     ->assertNotFound();
 });
 
+it('allows owner to show own unpublished article when authenticated', function () {
+  $owner = User::factory()->create();
+  $draftArticle = Article::factory()->create([
+    'user_id' => $owner->id,
+    'status' => 'draft',
+  ]);
+  $token = $owner->createToken('owner')->plainTextToken;
+
+  $this->withToken($token)
+    ->getJson('/api/v1/articles/' . $draftArticle->slug)
+    ->assertOk()
+    ->assertJsonPath('data.slug', $draftArticle->slug);
+});
+
+it('forbids non-owner from showing unpublished article', function () {
+  $owner = User::factory()->create();
+  $other = User::factory()->create();
+  $draftArticle = Article::factory()->create([
+    'user_id' => $owner->id,
+    'status' => 'draft',
+  ]);
+  $token = $other->createToken('other')->plainTextToken;
+
+  $this->withToken($token)
+    ->getJson('/api/v1/articles/' . $draftArticle->slug)
+    ->assertNotFound();
+});
+
 it('requires authentication to create article', function () {
   $this->postJson('/api/v1/articles', [])
     ->assertUnauthorized();

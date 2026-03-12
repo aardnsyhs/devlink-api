@@ -74,10 +74,13 @@ class ArticleController extends Controller
    *     )
    * )
    */
-  public function show(string $slug): ArticleResource
+  public function show(Request $request, string $slug): ArticleResource
   {
-    $article = $this->articleService->getBySlug($slug);
-    IncrementArticleViews::dispatch($article->id);
+    $article = $this->articleService->getBySlug($slug, $request->user('sanctum')?->id);
+
+    if ($article->status === 'published') {
+      IncrementArticleViews::dispatch($article->id);
+    }
 
     return new ArticleResource($article);
   }

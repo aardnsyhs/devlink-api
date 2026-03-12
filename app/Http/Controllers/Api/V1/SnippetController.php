@@ -76,10 +76,13 @@ class SnippetController extends Controller
    *     )
    * )
    */
-  public function show(string $slug): SnippetResource
+  public function show(Request $request, string $slug): SnippetResource
   {
-    $snippet = $this->snippetService->getBySlug($slug);
-    IncrementSnippetViews::dispatch($snippet->id);
+    $snippet = $this->snippetService->getBySlug($slug, $request->user('sanctum')?->id);
+
+    if ($snippet->status === 'published') {
+      IncrementSnippetViews::dispatch($snippet->id);
+    }
 
     return new SnippetResource($snippet->fresh(['user', 'tags']));
   }

@@ -16,9 +16,9 @@ class ArticleService
     return $this->articleRepository->getAll($filters);
   }
 
-  public function getBySlug(string $slug)
+  public function getBySlug(string $slug, ?int $viewerId = null)
   {
-    return $this->articleRepository->findBySlug($slug);
+    return $this->articleRepository->findBySlug($slug, $viewerId);
   }
 
   public function create(array $data, int $userId)

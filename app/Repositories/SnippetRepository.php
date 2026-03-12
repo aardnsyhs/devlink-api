@@ -40,13 +40,22 @@ class SnippetRepository implements SnippetRepositoryInterface
       ->paginate($filters['per_page'] ?? 15);
   }
 
-  public function findBySlug(string $slug): ?object
+  public function findBySlug(string $slug, ?int $viewerId = null): ?object
   {
-    return $this->model
+    $query = $this->model
       ->with(['user', 'tags'])
-      ->published()
-      ->where('slug', $slug)
-      ->firstOrFail();
+      ->where('slug', $slug);
+
+    if ($viewerId) {
+      $query->where(function ($q) use ($viewerId) {
+        $q->published()
+          ->orWhere('user_id', $viewerId);
+      });
+    } else {
+      $query->published();
+    }
+
+    return $query->firstOrFail();
   }
 
   public function create(array $data): object

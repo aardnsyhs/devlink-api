@@ -37,6 +37,34 @@ it('does not show unpublished snippet on public endpoint', function () {
     ->assertNotFound();
 });
 
+it('allows owner to show own unpublished snippet when authenticated', function () {
+  $owner = User::factory()->create();
+  $draftSnippet = Snippet::factory()->create([
+    'user_id' => $owner->id,
+    'status' => 'draft',
+  ]);
+  $token = $owner->createToken('owner')->plainTextToken;
+
+  $this->withToken($token)
+    ->getJson('/api/v1/snippets/' . $draftSnippet->slug)
+    ->assertOk()
+    ->assertJsonPath('data.slug', $draftSnippet->slug);
+});
+
+it('forbids non-owner from showing unpublished snippet', function () {
+  $owner = User::factory()->create();
+  $other = User::factory()->create();
+  $draftSnippet = Snippet::factory()->create([
+    'user_id' => $owner->id,
+    'status' => 'draft',
+  ]);
+  $token = $other->createToken('other')->plainTextToken;
+
+  $this->withToken($token)
+    ->getJson('/api/v1/snippets/' . $draftSnippet->slug)
+    ->assertNotFound();
+});
+
 it('requires authentication to create snippet', function () {
   $this->postJson('/api/v1/snippets', [])
     ->assertUnauthorized();
