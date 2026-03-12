@@ -82,8 +82,9 @@ it('can filter articles by status', function () {
 });
 
 it('can filter articles by tag slug', function () {
-  $tagMatched = Tag::create(['name' => 'DevOps', 'slug' => 'devops']);
-  $tagOther = Tag::create(['name' => 'Laravel', 'slug' => 'laravel']);
+  $suffix = uniqid();
+  $tagMatched = Tag::create(['name' => 'DevOps-' . $suffix, 'slug' => 'devops-' . $suffix]);
+  $tagOther = Tag::create(['name' => 'Laravel-' . $suffix, 'slug' => 'laravel-' . $suffix]);
 
   $matched = Article::factory()->published()->create();
   $notMatched = Article::factory()->published()->create();
@@ -91,7 +92,7 @@ it('can filter articles by tag slug', function () {
   $matched->tags()->attach($tagMatched->id);
   $notMatched->tags()->attach($tagOther->id);
 
-  $response = $this->getJson('/api/v1/articles?tag=devops')
+  $response = $this->getJson('/api/v1/articles?tag=' . $tagMatched->slug)
     ->assertOk();
 
   $slugs = collect($response->json('data'))->pluck('slug');
@@ -109,4 +110,29 @@ it('can paginate articles with per_page parameter', function () {
 
   expect($perPage)->toBe(2);
   expect(count($response->json('data')))->toBe(2);
+});
+
+it('can list only authenticated user articles when mine is enabled', function () {
+  $owner = User::factory()->create();
+  $otherUser = User::factory()->create();
+
+  $ownerPublished = Article::factory()->published()->create(['user_id' => $owner->id]);
+  $ownerDraft = Article::factory()->create(['user_id' => $owner->id, 'status' => 'draft']);
+  $otherPublished = Article::factory()->published()->create(['user_id' => $otherUser->id]);
+
+  $token = $owner->createToken('mine')->plainTextToken;
+
+  $response = $this->withToken($token)
+    ->getJson('/api/v1/articles?mine=1&status=all')
+    ->assertOk();
+
+  $ids = collect($response->json('data'))->pluck('id');
+  expect($ids)->toContain($ownerPublished->id);
+  expect($ids)->toContain($ownerDraft->id);
+  expect($ids)->not->toContain($otherPublished->id);
+});
+
+it('requires authentication when mine is enabled for articles list', function () {
+  $this->getJson('/api/v1/articles?mine=1&status=all')
+    ->assertUnauthorized();
 });

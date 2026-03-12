@@ -26,6 +26,7 @@ class SnippetController extends Controller
    *     summary="Get all published snippets",
    *     @OA\Parameter(name="search", in="query", @OA\Schema(type="string")),
    *     @OA\Parameter(name="tag", in="query", @OA\Schema(type="string")),
+   *     @OA\Parameter(name="mine", in="query", @OA\Schema(type="boolean")),
    *     @OA\Parameter(name="status", in="query", @OA\Schema(type="string", enum={"draft","published","archived"})),
    *     @OA\Parameter(name="language", in="query", @OA\Schema(type="string")),
    *     @OA\Parameter(name="per_page", in="query", @OA\Schema(type="integer", default=15)),
@@ -38,13 +39,21 @@ class SnippetController extends Controller
    */
   public function index(Request $request): SnippetCollection
   {
-    $snippets = $this->snippetService->getAll($request->only([
+    $filters = $request->only([
       'search',
       'tag',
       'status',
       'language',
       'per_page',
-    ]));
+    ]);
+
+    if ($request->boolean('mine')) {
+      $user = $request->user('sanctum');
+      abort_unless($user, 401, 'Unauthenticated.');
+      $filters['user_id'] = $user->id;
+    }
+
+    $snippets = $this->snippetService->getAll($filters);
 
     return new SnippetCollection($snippets);
   }

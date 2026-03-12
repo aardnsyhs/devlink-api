@@ -101,8 +101,9 @@ it('can filter snippets by status', function () {
 });
 
 it('can filter snippets by tag slug', function () {
-  $tagMatched = Tag::create(['name' => 'DevOps', 'slug' => 'devops']);
-  $tagOther = Tag::create(['name' => 'Laravel', 'slug' => 'laravel']);
+  $suffix = uniqid();
+  $tagMatched = Tag::create(['name' => 'DevOps-' . $suffix, 'slug' => 'devops-' . $suffix]);
+  $tagOther = Tag::create(['name' => 'Laravel-' . $suffix, 'slug' => 'laravel-' . $suffix]);
 
   $matched = Snippet::factory()->published()->create();
   $notMatched = Snippet::factory()->published()->create();
@@ -110,7 +111,7 @@ it('can filter snippets by tag slug', function () {
   $matched->tags()->attach($tagMatched->id);
   $notMatched->tags()->attach($tagOther->id);
 
-  $response = $this->getJson('/api/v1/snippets?tag=devops')
+  $response = $this->getJson('/api/v1/snippets?tag=' . $tagMatched->slug)
     ->assertOk();
 
   $ids = collect($response->json('data'))->pluck('id');
@@ -128,4 +129,29 @@ it('can paginate snippets with per_page parameter', function () {
 
   expect($perPage)->toBe(2);
   expect(count($response->json('data')))->toBe(2);
+});
+
+it('can list only authenticated user snippets when mine is enabled', function () {
+  $owner = User::factory()->create();
+  $otherUser = User::factory()->create();
+
+  $ownerPublished = Snippet::factory()->published()->create(['user_id' => $owner->id]);
+  $ownerDraft = Snippet::factory()->create(['user_id' => $owner->id, 'status' => 'draft']);
+  $otherPublished = Snippet::factory()->published()->create(['user_id' => $otherUser->id]);
+
+  $token = $owner->createToken('mine')->plainTextToken;
+
+  $response = $this->withToken($token)
+    ->getJson('/api/v1/snippets?mine=1&status=all')
+    ->assertOk();
+
+  $ids = collect($response->json('data'))->pluck('id');
+  expect($ids)->toContain($ownerPublished->id);
+  expect($ids)->toContain($ownerDraft->id);
+  expect($ids)->not->toContain($otherPublished->id);
+});
+
+it('requires authentication when mine is enabled for snippets list', function () {
+  $this->getJson('/api/v1/snippets?mine=1&status=all')
+    ->assertUnauthorized();
 });

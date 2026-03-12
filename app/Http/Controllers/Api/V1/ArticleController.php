@@ -26,6 +26,7 @@ class ArticleController extends Controller
    *     summary="Get all published articles",
    *     @OA\Parameter(name="search", in="query", @OA\Schema(type="string")),
    *     @OA\Parameter(name="tag", in="query", @OA\Schema(type="string")),
+   *     @OA\Parameter(name="mine", in="query", @OA\Schema(type="boolean")),
    *     @OA\Parameter(name="status", in="query", @OA\Schema(type="string", enum={"draft","published","archived"})),
    *     @OA\Parameter(name="per_page", in="query", @OA\Schema(type="integer", default=15)),
    *     @OA\Response(
@@ -37,12 +38,20 @@ class ArticleController extends Controller
    */
   public function index(Request $request): ArticleCollection
   {
-    $articles = $this->articleService->getAll($request->only([
+    $filters = $request->only([
       'search',
       'tag',
       'status',
       'per_page',
-    ]));
+    ]);
+
+    if ($request->boolean('mine')) {
+      $user = $request->user('sanctum');
+      abort_unless($user, 401, 'Unauthenticated.');
+      $filters['user_id'] = $user->id;
+    }
+
+    $articles = $this->articleService->getAll($filters);
 
     return new ArticleCollection($articles);
   }

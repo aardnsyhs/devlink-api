@@ -16,9 +16,11 @@ class ArticleRepository implements ArticleRepositoryInterface
   {
     $status = $filters['status'] ?? null;
     $tag = $filters['tag'] ?? null;
+    $userId = $filters['user_id'] ?? null;
 
     $query = $this->model
       ->with(['user:id,name', 'tags'])
+      ->when($userId, fn($q, $v) => $q->where('user_id', $v))
       ->when($filters['search'] ?? null, fn($q, $v) => $q->where('title', 'like', "%{$v}%"))
       ->when($tag, fn($q, $v) => $q->whereHas('tags', fn($tq) => $tq->where('slug', $v)));
 
