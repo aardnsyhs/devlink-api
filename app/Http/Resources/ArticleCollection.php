@@ -17,11 +17,17 @@ class ArticleCollection extends ResourceCollection
   {
     return [
       'data' => $this->collection,
+    ];
+  }
+
+  public function paginationInformation($request, $paginated, $default): array
+  {
+    return [
       'meta' => [
-        'current_page' => $this->currentPage(),
-        'per_page' => $this->perPage(),
-        'total' => $this->total(),
-        'last_page' => $this->lastPage(),
+        'current_page' => $paginated['current_page'],
+        'per_page' => $paginated['per_page'],
+        'total' => $paginated['total'],
+        'last_page' => $paginated['last_page'],
       ],
     ];
   }

@@ -17,17 +17,22 @@ class ArticleRepository implements ArticleRepositoryInterface
     $status = $filters['status'] ?? null;
     $tag = $filters['tag'] ?? null;
 
-    return $this->model
+    $query = $this->model
       ->with(['user:id,name', 'tags'])
-      ->when(
-        in_array($status, ['draft', 'published', 'archived'], true),
-        fn($q) => $status === 'published'
-          ? $q->published()
-          : $q->where('status', $status),
-        fn($q) => $q->published()
-      )
       ->when($filters['search'] ?? null, fn($q, $v) => $q->where('title', 'like', "%{$v}%"))
-      ->when($tag, fn($q, $v) => $q->whereHas('tags', fn($tq) => $tq->where('slug', $v)))
+      ->when($tag, fn($q, $v) => $q->whereHas('tags', fn($tq) => $tq->where('slug', $v)));
+
+    if ($status === 'all') {
+      // no status filter
+    } elseif (in_array($status, ['draft', 'published', 'archived'], true)) {
+      $status === 'published'
+        ? $query->published()
+        : $query->where('status', $status);
+    } else {
+      $query->published();
+    }
+
+    return $query
       ->latest('published_at')
       ->paginate($filters['per_page'] ?? 15);
   }
