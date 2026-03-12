@@ -41,6 +41,13 @@
                         }
                     },
                     {
+                        "name": "mine",
+                        "in": "query",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
                         "name": "status",
                         "in": "query",
                         "schema": {
@@ -467,6 +474,13 @@
                         "in": "query",
                         "schema": {
                             "type": "string"
+                        }
+                    },
+                    {
+                        "name": "mine",
+                        "in": "query",
+                        "schema": {
+                            "type": "boolean"
                         }
                     },
                     {
