@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Snippet;
+use App\Models\Tag;
 use App\Models\User;
 
 beforeEach(function () {
@@ -97,6 +98,24 @@ it('can filter snippets by status', function () {
   $ids = collect($response->json('data'))->pluck('id');
   expect($ids)->toContain($draftSnippet->id);
   expect($ids)->not->toContain($publishedSnippet->id);
+});
+
+it('can filter snippets by tag slug', function () {
+  $tagMatched = Tag::create(['name' => 'DevOps', 'slug' => 'devops']);
+  $tagOther = Tag::create(['name' => 'Laravel', 'slug' => 'laravel']);
+
+  $matched = Snippet::factory()->published()->create();
+  $notMatched = Snippet::factory()->published()->create();
+
+  $matched->tags()->attach($tagMatched->id);
+  $notMatched->tags()->attach($tagOther->id);
+
+  $response = $this->getJson('/api/v1/snippets?tag=devops')
+    ->assertOk();
+
+  $ids = collect($response->json('data'))->pluck('id');
+  expect($ids)->toContain($matched->id);
+  expect($ids)->not->toContain($notMatched->id);
 });
 
 it('can paginate snippets with per_page parameter', function () {

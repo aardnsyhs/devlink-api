@@ -25,6 +25,7 @@ class ArticleController extends Controller
    *     tags={"Articles"},
    *     summary="Get all published articles",
    *     @OA\Parameter(name="search", in="query", @OA\Schema(type="string")),
+   *     @OA\Parameter(name="tag", in="query", @OA\Schema(type="string")),
    *     @OA\Parameter(name="status", in="query", @OA\Schema(type="string", enum={"draft","published","archived"})),
    *     @OA\Parameter(name="per_page", in="query", @OA\Schema(type="integer", default=15)),
    *     @OA\Response(
@@ -38,6 +39,7 @@ class ArticleController extends Controller
   {
     $articles = $this->articleService->getAll($request->only([
       'search',
+      'tag',
       'status',
       'per_page',
     ]));

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Article;
+use App\Models\Tag;
 use App\Models\User;
 
 beforeEach(function () {
@@ -78,6 +79,24 @@ it('can filter articles by status', function () {
   $slugs = collect($response->json('data'))->pluck('slug');
   expect($slugs)->toContain($draftArticle->slug);
   expect($slugs)->not->toContain($publishedArticle->slug);
+});
+
+it('can filter articles by tag slug', function () {
+  $tagMatched = Tag::create(['name' => 'DevOps', 'slug' => 'devops']);
+  $tagOther = Tag::create(['name' => 'Laravel', 'slug' => 'laravel']);
+
+  $matched = Article::factory()->published()->create();
+  $notMatched = Article::factory()->published()->create();
+
+  $matched->tags()->attach($tagMatched->id);
+  $notMatched->tags()->attach($tagOther->id);
+
+  $response = $this->getJson('/api/v1/articles?tag=devops')
+    ->assertOk();
+
+  $slugs = collect($response->json('data'))->pluck('slug');
+  expect($slugs)->toContain($matched->slug);
+  expect($slugs)->not->toContain($notMatched->slug);
 });
 
 it('can paginate articles with per_page parameter', function () {

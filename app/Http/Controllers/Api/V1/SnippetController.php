@@ -25,6 +25,7 @@ class SnippetController extends Controller
    *     tags={"Snippets"},
    *     summary="Get all published snippets",
    *     @OA\Parameter(name="search", in="query", @OA\Schema(type="string")),
+   *     @OA\Parameter(name="tag", in="query", @OA\Schema(type="string")),
    *     @OA\Parameter(name="status", in="query", @OA\Schema(type="string", enum={"draft","published","archived"})),
    *     @OA\Parameter(name="language", in="query", @OA\Schema(type="string")),
    *     @OA\Parameter(name="per_page", in="query", @OA\Schema(type="integer", default=15)),
@@ -39,6 +40,7 @@ class SnippetController extends Controller
   {
     $snippets = $this->snippetService->getAll($request->only([
       'search',
+      'tag',
       'status',
       'language',
       'per_page',

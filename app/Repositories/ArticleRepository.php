@@ -15,6 +15,7 @@ class ArticleRepository implements ArticleRepositoryInterface
   public function getAll(array $filters = []): LengthAwarePaginator
   {
     $status = $filters['status'] ?? null;
+    $tag = $filters['tag'] ?? null;
 
     return $this->model
       ->with(['user:id,name', 'tags'])
@@ -26,6 +27,7 @@ class ArticleRepository implements ArticleRepositoryInterface
         fn($q) => $q->published()
       )
       ->when($filters['search'] ?? null, fn($q, $v) => $q->where('title', 'like', "%{$v}%"))
+      ->when($tag, fn($q, $v) => $q->whereHas('tags', fn($tq) => $tq->where('slug', $v)))
       ->latest('published_at')
       ->paginate($filters['per_page'] ?? 15);
   }
