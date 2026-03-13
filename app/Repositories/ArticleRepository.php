@@ -21,7 +21,14 @@ class ArticleRepository implements ArticleRepositoryInterface
     $query = $this->model
       ->with(['user:id,name', 'tags'])
       ->when($userId, fn($q, $v) => $q->where('user_id', $v))
-      ->when($filters['search'] ?? null, fn($q, $v) => $q->where('title', 'like', "%{$v}%"))
+      ->when($filters['search'] ?? null, function ($q, $v) {
+        $q->where(function ($searchQuery) use ($v) {
+          $searchQuery
+            ->where('title', 'like', "%{$v}%")
+            ->orWhere('excerpt', 'like', "%{$v}%")
+            ->orWhere('content', 'like', "%{$v}%");
+        });
+      })
       ->when($tag, fn($q, $v) => $q->whereHas('tags', fn($tq) => $tq->where('slug', $v)));
 
     if ($status === 'all') {

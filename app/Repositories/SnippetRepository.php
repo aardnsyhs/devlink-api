@@ -22,7 +22,14 @@ class SnippetRepository implements SnippetRepositoryInterface
       ->with(['user:id,name', 'tags'])
       ->when($userId, fn($q, $v) => $q->where('user_id', $v))
       ->when($filters['language'] ?? null, fn($q, $v) => $q->where('language', $v))
-      ->when($filters['search'] ?? null, fn($q, $v) => $q->where('title', 'like', "%{$v}%"))
+      ->when($filters['search'] ?? null, function ($q, $v) {
+        $q->where(function ($searchQuery) use ($v) {
+          $searchQuery
+            ->where('title', 'like', "%{$v}%")
+            ->orWhere('description', 'like', "%{$v}%")
+            ->orWhere('code', 'like', "%{$v}%");
+        });
+      })
       ->when($tag, fn($q, $v) => $q->whereHas('tags', fn($tq) => $tq->where('slug', $v)));
 
     if ($status === 'all') {

@@ -23,11 +23,11 @@ class SnippetController extends Controller
    * @OA\Get(
    *     path="/api/v1/snippets",
    *     tags={"Snippets"},
-   *     summary="Get all published snippets",
+   *     summary="Get snippets",
    *     @OA\Parameter(name="search", in="query", @OA\Schema(type="string")),
    *     @OA\Parameter(name="tag", in="query", @OA\Schema(type="string")),
    *     @OA\Parameter(name="mine", in="query", @OA\Schema(type="boolean")),
-   *     @OA\Parameter(name="status", in="query", @OA\Schema(type="string", enum={"draft","published","archived"})),
+   *     @OA\Parameter(name="status", in="query", @OA\Schema(type="string", enum={"all","draft","published","archived"})),
    *     @OA\Parameter(name="language", in="query", @OA\Schema(type="string")),
    *     @OA\Parameter(name="per_page", in="query", @OA\Schema(type="integer", default=15)),
    *     @OA\Response(

@@ -23,7 +23,7 @@
                 "tags": [
                     "Articles"
                 ],
-                "summary": "Get all published articles",
+                "summary": "Get articles",
                 "operationId": "daffc9d151a0c7c956d1157d38e78859",
                 "parameters": [
                     {
@@ -53,6 +53,7 @@
                         "schema": {
                             "type": "string",
                             "enum": [
+                                "all",
                                 "draft",
                                 "published",
                                 "archived"
@@ -513,7 +514,7 @@
                 "tags": [
                     "Snippets"
                 ],
-                "summary": "Get all published snippets",
+                "summary": "Get snippets",
                 "operationId": "148313d8088cb12f370658147d66bfb2",
                 "parameters": [
                     {
@@ -543,6 +544,7 @@
                         "schema": {
                             "type": "string",
                             "enum": [
+                                "all",
                                 "draft",
                                 "published",
                                 "archived"
